@@ -1,0 +1,22 @@
+➜  ec2016 git:(master) ✗ ls                                                
+FletcherPowellEvaluation.class SphereEvaluation.java
+FletcherPowellEvaluation.java  contest.jar
+LICENSE                        player0.class
+MainClass.txt                  player0.java
+RastriginEvaluation.class      submission.jar
+RastriginEvaluation.java       testrun.jar
+SphereEvaluation.class
+➜  ec2016 git:(master) ✗ javac -cp contest.jar player9.java
+➜  ec2016 git:(master) ✗ jar cmf MainClass.txt submission.jar player9.class
+➜  ec2016 git:(master) ✗ java -jar testrun.jar -submission=player9 -evaluation=RastriginEvaluation -seed=1
+Score: 10.0
+Runtime: 36ms
+
+
+
+
+
+
+
+
+
