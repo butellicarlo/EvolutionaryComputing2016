@@ -28,16 +28,38 @@ public class player9 implements ContestSubmission
 		
 		// Get evaluation properties
 		Properties props = evaluation.getProperties();
+
         // Get evaluation limit
         evaluations_limit_ = Integer.parseInt(props.getProperty("Evaluations"));
+
 		// Property keys depend on specific evaluation
 		// E.g. double param = Double.parseDouble(props.getProperty("property_name"));
         boolean isMultimodal = Boolean.parseBoolean(props.getProperty("Multimodal"));
         boolean hasStructure = Boolean.parseBoolean(props.getProperty("Regular"));
         boolean isSeparable = Boolean.parseBoolean(props.getProperty("Separable"));
 
-		// Do sth with property values, e.g. specify relevant settings of your algorithm
+        System.out.println("Is multimodal? " + isMultimodal);
+        System.out.println("I regualar? " + hasStructure);
+        System.out.println("Is separable? " + isSeparable);
+        System.out.println("Number of evaluations: " + evaluations_limit_);
+
+		/* Do sth with property values, e.g. specify relevant settings of your algorithm */
+		// If Modal
         if(isMultimodal){
+            // Do sth
+        }else{
+            // Do sth else
+        }
+        
+        // If has strong structure
+        if(hasStructure){
+            // Do sth
+        }else{
+            // Do sth else
+        }
+
+        // If is separable
+        if(isSeparable){
             // Do sth
         }else{
             // Do sth else
