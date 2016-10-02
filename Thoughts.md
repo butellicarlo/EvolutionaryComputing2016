@@ -1,5 +1,6 @@
 #### **My first thoughts on the algorithm**
 thursday 29 - sept
+
 1. make the size of the population bigger/smaller according to the max evaluations
 2. Always keep diversity: ratio fit and random parents
 3. test different recombination/crossover methods: one-point - two-point or decide per allel is it is switched or not
@@ -10,6 +11,7 @@ thursday 29 - sept
 #### The online functions
 I was talking to some of our classmates on the assignment and one of them actually figured out that all the online functions were modal, and unstructed and unseperable.
 Meaning the following:
+
 1. There is no structure, therefor we cannot know if we are close to the global optimum (optima).
 2. Each allel's value is dependent on one another because it is insperable.
 3. As mentioned in 1, we can't know if we are close to the global optimum because it is modal and unstuctured. We might be able to approach this global optimum by keeping diversity high.
