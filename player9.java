@@ -77,7 +77,7 @@ public class player9 implements ContestSubmission
         
         int evals = 0;
         // init starting population
-        Population myPop = new Population(POPULATION_SIZE, true);
+        Population population = new Population(POPULATION_SIZE, true);
 
          // calculate fitness
         while(evals<evaluations_limit_){
