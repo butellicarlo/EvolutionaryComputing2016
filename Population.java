@@ -1,9 +1,7 @@
-package ec2016;
-
 import java.util.Random;
 import java.util.*;
 
-public class Population {
+public class Population extends Individual{
 	Individual[] population;
 
 	public Population(int size, boolean flag){

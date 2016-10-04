@@ -1,5 +1,3 @@
-package ec2016;
-
 import java.util.Random;
 import java.util.*;
 

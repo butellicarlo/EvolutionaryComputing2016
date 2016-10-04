@@ -1,5 +1,3 @@
-
-package ec2016;
 import org.vu.contest.ContestSubmission;
 import org.vu.contest.ContestEvaluation;
 
@@ -8,6 +6,11 @@ import java.util.Properties;
 
 public class player9 implements ContestSubmission
 {
+    int POPULATION_SIZE = 100;
+    int SURVIVERS = 25; // number of surviving individuals from old generation
+    int FITSELECTION_SIZE = 40; // fit parent selection size
+    int RANDOMSELECTION_SIZE = 10; // random parents selection, exclude fit
+
     Random rnd_;
     ContestEvaluation evaluation_;
     private int evaluations_limit_;
@@ -73,13 +76,10 @@ public class player9 implements ContestSubmission
         // Run your algorithm here
         
         int evals = 0;
-        // init population
-        Population myPop = new Population(20, true);
+        // init starting population
+        Population myPop = new Population(POPULATION_SIZE, true);
 
-        System.out.println("Population: ");
-        myPop.printPopulation();
-
-        // calculate fitness
+         // calculate fitness
         while(evals<evaluations_limit_){
             // Select parents
             // Apply crossover / mutation operators
