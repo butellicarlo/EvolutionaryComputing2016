@@ -1,3 +1,5 @@
+
+package ec2016;
 import org.vu.contest.ContestSubmission;
 import org.vu.contest.ContestEvaluation;
 
@@ -6,34 +8,34 @@ import java.util.Properties;
 
 public class player9 implements ContestSubmission
 {
-	Random rnd_;
-	ContestEvaluation evaluation_;
+    Random rnd_;
+    ContestEvaluation evaluation_;
     private int evaluations_limit_;
-	
-	public player9()
-	{
-		rnd_ = new Random();
-	}
-	
-	public void setSeed(long seed)
-	{
-		// Set seed of algortihms random process
-		rnd_.setSeed(seed);
-	}
+    
+    public player9()
+    {
+        rnd_ = new Random();
+    }
+    
+    public void setSeed(long seed)
+    {
+        // Set seed of algortihms random process
+        rnd_.setSeed(seed);
+    }
 
-	public void setEvaluation(ContestEvaluation evaluation)
-	{
-		// Set evaluation problem used in the run
-		evaluation_ = evaluation;
-		
-		// Get evaluation properties
-		Properties props = evaluation.getProperties();
+    public void setEvaluation(ContestEvaluation evaluation)
+    {
+        // Set evaluation problem used in the run
+        evaluation_ = evaluation;
+        
+        // Get evaluation properties
+        Properties props = evaluation.getProperties();
 
         // Get evaluation limit
         evaluations_limit_ = Integer.parseInt(props.getProperty("Evaluations"));
 
-		// Property keys depend on specific evaluation
-		// E.g. double param = Double.parseDouble(props.getProperty("property_name"));
+        // Property keys depend on specific evaluation
+        // E.g. double param = Double.parseDouble(props.getProperty("property_name"));
         boolean isMultimodal = Boolean.parseBoolean(props.getProperty("Multimodal"));
         boolean hasStructure = Boolean.parseBoolean(props.getProperty("Regular"));
         boolean isSeparable = Boolean.parseBoolean(props.getProperty("Separable"));
@@ -43,8 +45,8 @@ public class player9 implements ContestSubmission
         System.out.println("Is separable? " + isSeparable);
         System.out.println("Number of evaluations: " + evaluations_limit_);
 
-		/* Do sth with property values, e.g. specify relevant settings of your algorithm */
-		// If Modal
+        /* Do sth with property values, e.g. specify relevant settings of your algorithm */
+        // If Modal
         if(isMultimodal){
             // Do sth
         }else{
@@ -66,12 +68,17 @@ public class player9 implements ContestSubmission
         }
     }
     
-	public void run()
-	{
-		// Run your algorithm here
+    public void run()
+    {
+        // Run your algorithm here
         
         int evals = 0;
         // init population
+        Population myPop = new Population(20, true);
+
+        System.out.println("Population: ");
+        myPop.printPopulation();
+
         // calculate fitness
         while(evals<evaluations_limit_){
             // Select parents
@@ -83,5 +90,5 @@ public class player9 implements ContestSubmission
             // Select survivors
         }
 
-	}
+    }
 }
