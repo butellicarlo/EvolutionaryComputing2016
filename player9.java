@@ -1,6 +1,7 @@
 import org.vu.contest.ContestSubmission;
 import org.vu.contest.ContestEvaluation;
-
+import java.util.*;
+import java.lang.*;
 import java.util.Random;
 import java.util.Properties;
 
@@ -10,6 +11,7 @@ public class player9 implements ContestSubmission
     int SURVIVERS = 25; // number of surviving individuals from old generation
     int FITSELECTION_SIZE = 40; // fit parent selection size
     int RANDOMSELECTION_SIZE = 10; // random parents selection, exclude fit
+    double[] fitnesses = new double[POPULATION_SIZE]; // calculated fitnesses of each individual
 
     Random rnd_;
     ContestEvaluation evaluation_;
@@ -43,11 +45,6 @@ public class player9 implements ContestSubmission
         boolean hasStructure = Boolean.parseBoolean(props.getProperty("Regular"));
         boolean isSeparable = Boolean.parseBoolean(props.getProperty("Separable"));
 
-        System.out.println("Is multimodal? " + isMultimodal);
-        System.out.println("I regualar? " + hasStructure);
-        System.out.println("Is separable? " + isSeparable);
-        System.out.println("Number of evaluations: " + evaluations_limit_);
-
         /* Do sth with property values, e.g. specify relevant settings of your algorithm */
         // If Modal
         if(isMultimodal){
@@ -73,22 +70,38 @@ public class player9 implements ContestSubmission
     
     public void run()
     {
-        // Run your algorithm here
-        
+        // Run your algorithm here       
         int evals = 0;
         // init starting population
         Population population = new Population(POPULATION_SIZE, true);
+        
+        /* Calculate fitensses of the first random population */
+        for(int i = 0; i < POPULATION_SIZE; i++){
+            fitnesses[i] = (double) evaluation_.evaluate(population.getIndividual(i));
+        }
+
+        int fittest = population.findFittest(fitnesses);
+        double[] test = population.getIndividual(fittest);
 
          // calculate fitness
-        while(evals<evaluations_limit_){
+        while(evals<evaluations_limit_-POPULATION_SIZE){
             // Select parents
             // Apply crossover / mutation operators
             double child[] = {0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0};
             // Check fitness of unknown fuction
-            Double fitness = (double) evaluation_.evaluate(child);
+            Double fitness = (double) evaluation_.evaluate(test);
             evals++;
             // Select survivors
         }
+    }
 
+    /* Randomly chose the index (numbers between start-end) of the individuals to be chosen */
+    public int[] randomIndividualSelection(int startIndex, int endIndex, int n){
+        Random r = new Random();
+        int[] individualsIndex = new int[n];
+        for (int i=0; i < n; i++){ 
+            individualsIndex[i] = r.nextInt(endIndex) + startIndex; 
+        }
+        return individualsIndex;
     }
 }

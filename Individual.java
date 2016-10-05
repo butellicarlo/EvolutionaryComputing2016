@@ -9,14 +9,14 @@ public class Individual {
     Random r = new Random();
 
     public Individual(){
-    	individual = new double[defaultSize];
-    	for (int i = 0; i < defaultSize; i++) {
+        individual = new double[defaultSize];
+        for (int i = 0; i < defaultSize; i++) {
             individual[i] = -5.0 + r.nextDouble() * 10; 
         }
     }
 
     public double[] getIndividual(){
-    	return individual;
+        return individual;
     }
 
     /*get individual's feature*/
@@ -35,6 +35,6 @@ public class Individual {
     }
 
     public int size(){
-    	return individual.length;
+        return individual.length;
     }
 }
