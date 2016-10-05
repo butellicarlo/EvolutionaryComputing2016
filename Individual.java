@@ -5,28 +5,41 @@ public class Individual {
 
     static int defaultSize = 10;
     static double fitness = 0;
-    private double[] individual;
+    private double[] genotype;
     Random r = new Random();
 
+
+
     /* Constructur */
-    public Individual(){
-        individual = new double[defaultSize];
-        for (int i = 0; i < defaultSize; i++) {
-            individual[i] = -5.0 + r.nextDouble() * 10; 
+    public Individual(boolean random){
+        // boolean random should decide if random allels will be created or if
+        if(random){
+            genotype = new double[defaultSize];
+            for (int i = 0; i < defaultSize; i++) {
+                genotype[i] = -5.0 + r.nextDouble() * 10; 
+            }
         }
     }
 
-    public double[] getIndividual(){
-        return individual;
+    public double[] getGenotype(){
+        return genotype;
+    }
+
+    public Individual copyIndividual(){
+        Individual newIndividual = new Individual(false);
+        for(int i=0;i<defaultSize;i++){
+            newIndividual.changeFeature(i, genotype[i]);
+        }
+        return newIndividual;
     }
 
     /*get individual's feature*/
     public double getFeature(int index) {
-        return individual[index];
+        return genotype[index];
     }
 
     /* save fitness for this individual*/
-    public void saveFitness(int fit) {
+    public void saveFitness(double fit) {
         this.fitness = fit;
     }
 
@@ -36,6 +49,12 @@ public class Individual {
     }
 
     public int size(){
-        return individual.length;
+        return genotype.length;
     }
+
+    public void changeFeature(int index, double value){
+        genotype[index] = value;
+        fitness = 0;
+    }
+
 }

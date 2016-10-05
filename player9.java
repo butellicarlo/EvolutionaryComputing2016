@@ -74,29 +74,37 @@ public class player9 implements ContestSubmission
         int evals = 0;
         // init starting population
         Population population = new Population(POPULATION_SIZE, true);
-        
+        Population children;
         /* Calculate fitensses of the first random population */
         for(int i = 0; i < POPULATION_SIZE; i++){
             fitnesses[i] = (double) evaluation_.evaluate(population.getIndividual(i));
         }
 
-        /* Get the fittest from the fitnesses */
-        int fittest = population.findFittest(fitnesses);
-        /* Get the fittest individual array */
-        double[] fittestIndividual = population.getIndividual(fittest);
 
          // calculate fitness
         while(evals<evaluations_limit_-POPULATION_SIZE){
             
             // Select parents
-            
             // Apply crossover / mutation operators
+            // *** this is all done in getMutatedPopulation
+            children = population.getMutatedPopulation();
             
-            // Check fitness of unknown fuction
-            Double fitness = (double) evaluation_.evaluate(population.getIndividual(fittestIndividual));
-            evals++;
-            
-            // Select survivors
+            // Check fitness of each child
+            for(int i=0;i<children.populationSize();i++){
+                Individual child = children.getIndividual(i);
+                Individual parent = population.getIndividual(i);
+                
+                Double fitness = (double) evaluation_.evaluate(children.getIndividual(i));
+                child.saveFitness(fitness);
+                //select survivor (parent or child, the one with the highest fitness)
+                if (child.getFitness() >= parent.fitness){
+                    //take child into population
+                    population.changeIndividual(i,child);
+                }
+                evals++;
+            }
+
+
         }
     }
 
