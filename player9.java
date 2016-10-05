@@ -75,11 +75,14 @@ public class player9 implements ContestSubmission
         // init starting population
         Population population = new Population(POPULATION_SIZE, true);
         Population children;
+        Double fitness;
         /* Calculate fitensses of the first random population */
         for(int i = 0; i < POPULATION_SIZE; i++){
-            fitnesses[i] = (double) evaluation_.evaluate(population.getIndividual(i));
+            fitness = (double) evaluation_.evaluate(population.getGenotype(i));
+            population.getIndividual(i).saveFitness(fitness);
         }
 
+        boolean checkFitness = true;
 
          // calculate fitness
         while(evals<evaluations_limit_-POPULATION_SIZE){
@@ -94,8 +97,13 @@ public class player9 implements ContestSubmission
                 Individual child = children.getIndividual(i);
                 Individual parent = population.getIndividual(i);
                 
-                Double fitness = (double) evaluation_.evaluate(children.getIndividual(i));
+                fitness = (double) evaluation_.evaluate(children.getGenotype(i));
                 child.saveFitness(fitness);
+                
+                // if(evals< 5){
+                //     children.getIndividual(i).print(); 
+                // }
+                
                 //select survivor (parent or child, the one with the highest fitness)
                 if (child.getFitness() >= parent.fitness){
                     //take child into population

@@ -5,16 +5,18 @@ public class Population extends Individual{
     
     Individual[] population;
     Random r = new Random();
-    static double f = 0.3; // parameter
-    static double cr = 0.3; // cross-over rate/possibility. 
+    double f = 0.3; // parameter
+    double cr = 0.3; // cross-over rate/possibility. 
 
     /* Constructur */
     public Population(int size, boolean flag){
         population = new Individual[size];
         if (flag){
             for (int i = 0; i < size; i++) {
-                population[i] = new Individual(true);
+                population[i] = new Individual();
+                population[i].setGenotypeRandom();
             }
+
         }
     }
 
@@ -85,9 +87,9 @@ public class Population extends Individual{
         double c; //chance, to be compared with cr
         for(int i = 0; i < populationSize(); i++){
             // pick x,y,z from the population and create
-            x = getIndividual(r.nextInt(populationSize)).copyIndividual();
-            y = population.getIndividual(r.nextInt(populationSize));
-            z = population.getIndividual(r.nextInt(populationSize));
+            x = getIndividual(r.nextInt(populationSize())).copyIndividual();
+            y = getIndividual(r.nextInt(populationSize()));
+            z = getIndividual(r.nextInt(populationSize()));
             mutateX(x,y,z);
 
             parent = population[i];

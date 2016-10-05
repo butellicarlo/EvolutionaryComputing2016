@@ -3,30 +3,32 @@ import java.util.*;
 
 public class Individual {
 
-    static int defaultSize = 10;
-    static double fitness = 0;
-    private double[] genotype;
+    int defaultSize = 10;
+    double fitness = 0;
+    double[] genotype;
     Random r = new Random();
 
 
 
     /* Constructur */
-    public Individual(boolean random){
+    public Individual(){
         // boolean random should decide if random allels will be created or if
-        if(random){
-            genotype = new double[defaultSize];
-            for (int i = 0; i < defaultSize; i++) {
-                genotype[i] = -5.0 + r.nextDouble() * 10; 
-            }
-        }
+        genotype = new double[defaultSize];
     }
 
     public double[] getGenotype(){
         return genotype;
     }
 
+    public void setGenotypeRandom(){
+        
+        for (int i = 0; i < defaultSize; i++) {
+            genotype[i] = -5.0 + r.nextDouble() * 10; 
+            }
+    }
+
     public Individual copyIndividual(){
-        Individual newIndividual = new Individual(false);
+        Individual newIndividual = new Individual();
         for(int i=0;i<defaultSize;i++){
             newIndividual.changeFeature(i, genotype[i]);
         }
@@ -55,6 +57,14 @@ public class Individual {
     public void changeFeature(int index, double value){
         genotype[index] = value;
         fitness = 0;
+    }
+    public void print(){
+        System.out.print("[");
+        for (int i = 0; i <size();i++){
+            System.out.print(", ");
+            System.out.print(getFeature(i));
+        }
+        System.out.println("]\n");
     }
 
 }
