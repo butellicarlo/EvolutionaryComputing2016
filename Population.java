@@ -2,6 +2,7 @@ import java.util.Random;
 import java.util.*;
 
 public class Population extends Individual{
+    
     Individual[] population;
 
     /* Constructur */
