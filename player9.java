@@ -80,17 +80,22 @@ public class player9 implements ContestSubmission
             fitnesses[i] = (double) evaluation_.evaluate(population.getIndividual(i));
         }
 
+        /* Get the fittest from the fitnesses */
         int fittest = population.findFittest(fitnesses);
-        double[] test = population.getIndividual(fittest);
+        /* Get the fittest individual array */
+        double[] fittestIndividual = population.getIndividual(fittest);
 
          // calculate fitness
         while(evals<evaluations_limit_-POPULATION_SIZE){
+            
             // Select parents
+            
             // Apply crossover / mutation operators
-            double child[] = {0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0};
+            
             // Check fitness of unknown fuction
-            Double fitness = (double) evaluation_.evaluate(test);
+            Double fitness = (double) evaluation_.evaluate(population.getIndividual(fittestIndividual));
             evals++;
+            
             // Select survivors
         }
     }

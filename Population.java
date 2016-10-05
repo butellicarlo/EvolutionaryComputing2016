@@ -4,6 +4,7 @@ import java.util.*;
 public class Population extends Individual{
     Individual[] population;
 
+    /* Constructur */
     public Population(int size, boolean flag){
         population = new Individual[size];
         for (int i = 0; i < size; i++) {

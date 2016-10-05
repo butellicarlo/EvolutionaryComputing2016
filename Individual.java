@@ -8,6 +8,7 @@ public class Individual {
     private double[] individual;
     Random r = new Random();
 
+    /* Constructur */
     public Individual(){
         individual = new double[defaultSize];
         for (int i = 0; i < defaultSize; i++) {
