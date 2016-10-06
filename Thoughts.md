@@ -17,4 +17,27 @@ Meaning the following:
 3. As mentioned in 1, we can't know if we are close to the global optimum because it is modal and unstuctured. We might be able to approach this global optimum by keeping diversity high.
 
 
+#### Results
+##### Differential Algoritm 
+(DE/rand/1/bin --> Random base parent, 1 difference vector, uniform crossover)
+
+- Cr = 0.3
+- F = 0.3
+- Population size = 100
+
+- Function 1: 9.828662882374749
+- Function 2: 0.19671557645716536
+- Function 3: 9.944575080552198
+
+----------------
+
+* Cr = 0.5
+* F = 0.5
+* Population size = 100
+
+* Function 1: 9.851157466790884 +
+* Function 2: 0.13582734701789337 -
+* Function 3: 7.455024876704664 --
+
+
 
