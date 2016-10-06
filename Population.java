@@ -5,8 +5,8 @@ public class Population extends Individual{
     
     Individual[] population;
     Random r = new Random();
-    double f = 0.3; // parameter
-    double cr = 0.3; // cross-over rate/possibility. 
+    double f = 0.5; // parameter
+    double cr = 0.5; // cross-over rate/possibility. 
 
     /* Constructur */
     public Population(int size, boolean flag){
@@ -81,6 +81,7 @@ public class Population extends Individual{
         Individual y;
         Individual z;
         Individual parent;
+        int forcedCrossoverIndex;
 
         Population children = new Population(populationSize(), false);
 
@@ -95,10 +96,12 @@ public class Population extends Individual{
             parent = population[i];
 
             //make child
+            forcedCrossoverIndex = r.nextInt(10);
+            x.changeFeature(forcedCrossoverIndex,parent.getFeature(forcedCrossoverIndex)); //One allel/feature of the parent needs to be kept accoring to the theory
             for(int j=0;j<x.size();j++){
                 c = r.nextDouble();
                 
-                if(c>cr){
+                if(c>cr && j!= forcedCrossoverIndex){
                     //take feature from parent
                     x.changeFeature(j,parent.getFeature(j));
                 }
