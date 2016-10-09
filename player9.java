@@ -70,8 +70,6 @@ public class player9 implements ContestSubmission
             population.getIndividual(i).saveFitness(fitness);
         }
 
-        boolean checkFitness = true;
-
          // calculate fitness
         while(evals<evaluations_limit_-POPULATION_SIZE)
         {           

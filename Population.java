@@ -8,8 +8,8 @@ public class Population extends Individual
     Individual[] population;
     Random r = new Random();
     double f = 0.3; // parameter
-    double cr = 0.9; // cross-over rate/possibility. 
-    int tournament_size = 6; // tournament selection
+    double cr = 0.3; // cross-over rate/possibility. 
+    int tournament_size = 10; // tournament selection
 
     /* Constructur */
     public Population(int size, boolean flag)
@@ -144,9 +144,9 @@ public class Population extends Individual
         for(int i = 0; i < populationSize(); i++)
         {
             // pick x,y,z from the population and create
-            x = getIndividual(r.nextInt(populationSize())).copyIndividual();
-            y = getIndividual(r.nextInt(populationSize()));
-            z = getIndividual(r.nextInt(populationSize()));
+            x = this.tournamentSelection().copyIndividual();//getIndividual(r.nextInt(populationSize())).copyIndividual();
+            y = this.tournamentSelection();//getIndividual(r.nextInt(populationSize()));
+            z = crossover(x,y); //getIndividual(r.nextInt(populationSize()));
             mutateX(x,y,z);
 
             parent = population[i];
