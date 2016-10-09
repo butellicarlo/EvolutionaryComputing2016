@@ -1,3 +1,4 @@
+/* K+lEbok= */
 import org.vu.contest.ContestSubmission;
 import org.vu.contest.ContestEvaluation;
 import java.util.*;
@@ -47,25 +48,11 @@ public class player9 implements ContestSubmission
 
         /* Do sth with property values, e.g. specify relevant settings of your algorithm */
         // If Modal
-        if(isMultimodal){
-            // Do sth
-        }else{
-            // Do sth else
-        }
-        
+        if(isMultimodal){ /* Do sth */ }else{ /* Do sth else */ }
         // If has strong structure
-        if(hasStructure){
-            // Do sth
-        }else{
-            // Do sth else
-        }
-
+        if(hasStructure){ /* Do sth */ }else{ /* Do sth else */ }
         // If is separable
-        if(isSeparable){
-            // Do sth
-        }else{
-            // Do sth else
-        }
+        if(isSeparable){ /* Do sth */ }else{ /* Do sth else */ }
     }
     
     public void run()
@@ -74,37 +61,57 @@ public class player9 implements ContestSubmission
         int evals = 0;
         // init starting population
         Population population = new Population(POPULATION_SIZE, true);
-        
+        Population children;
+        Double fitness;
         /* Calculate fitensses of the first random population */
-        for(int i = 0; i < POPULATION_SIZE; i++){
-            fitnesses[i] = (double) evaluation_.evaluate(population.getIndividual(i));
+        for(int i = 0; i < POPULATION_SIZE; i++)
+        {
+            fitness = (double) evaluation_.evaluate(population.getGenotype(i));
+            population.getIndividual(i).saveFitness(fitness);
         }
 
-        /* Get the fittest from the fitnesses */
-        int fittest = population.findFittest(fitnesses);
-        /* Get the fittest individual array */
-        double[] fittestIndividual = population.getIndividual(fittest);
+        boolean checkFitness = true;
 
          // calculate fitness
-        while(evals<evaluations_limit_-POPULATION_SIZE){
-            
+        while(evals<evaluations_limit_-POPULATION_SIZE)
+        {           
             // Select parents
-            
             // Apply crossover / mutation operators
+            // *** this is all done in getMutatedPopulation
+            children = population.getMutatedPopulation();
+            //children = population.getNextPopulation();
             
-            // Check fitness of unknown fuction
-            Double fitness = (double) evaluation_.evaluate(population.getIndividual(fittestIndividual));
-            evals++;
-            
-            // Select survivors
+            // Check fitness of each child
+            for(int i = 0; i < children.populationSize(); i++)
+            {
+                Individual child = children.getIndividual(i);
+                Individual parent = population.getIndividual(i);
+                
+                fitness = (double) evaluation_.evaluate(children.getGenotype(i));
+                child.saveFitness(fitness);
+                
+                // if(evals< 5){
+                //     children.getIndividual(i).print(); 
+                // }
+                
+                //select survivor (parent or child, the one with the highest fitness)
+                if (child.getFitness() >= parent.fitness)
+                {
+                    //take child into population
+                    population.changeIndividual(i,child);
+                }
+                evals++;
+            }
         }
     }
 
     /* Randomly chose the index (numbers between start-end) of the individuals to be chosen */
-    public int[] randomIndividualSelection(int startIndex, int endIndex, int n){
+    public int[] randomIndividualSelection(int startIndex, int endIndex, int n)
+    {
         Random r = new Random();
         int[] individualsIndex = new int[n];
-        for (int i=0; i < n; i++){ 
+        for (int i=0; i < n; i++)
+        { 
             individualsIndex[i] = r.nextInt(endIndex) + startIndex; 
         }
         return individualsIndex;
