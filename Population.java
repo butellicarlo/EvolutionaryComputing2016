@@ -137,11 +137,12 @@ public class Population extends Individual
         Individual y;
         Individual z;
         Individual parent;
+        double c; //chance, to be compared with cr
 
         Population children = new Population(populationSize(), false);
+        children.changeIndividual(0, findFittest());
 
-        double c; //chance, to be compared with cr
-        for(int i = 0; i < populationSize(); i++)
+        for(int i = 1; i < populationSize(); i++)
         {
             // pick x,y,z from the population and create
             x = this.tournamentSelection().copyIndividual();//getIndividual(r.nextInt(populationSize())).copyIndividual();
@@ -193,36 +194,7 @@ public class Population extends Individual
         }
     }
 
-    public Population getNextPopulation()
-    {
-        
-        Population nextPopulation = new Population(populationSize(), false);
-
-        /* Maintain the fittest from previous population */
-        nextPopulation.add(this.findFittest(), 0);
-        
-        /* Maintain the first 10 fittests individual of previous population */
-        /*double[] fitnesses = orderFitnesses();
-        for(int i = 0; i < 10; i++)
-        {
-            nextPopulation.add(fitnesses[(fitnesses.length - i) - 1], i);
-        }*/
-
-        /* Apply tournament selection and crossover */
-        for(int i = 1; i < populationSize(); i++)
-        {   
-            /* Select individual for crossover */
-            Individual x = tournamentSelection();
-            Individual y = tournamentSelection();
-            Individual z = crossover(x, y);
-            nextPopulation.add(z, i);
-            //mutateX(x,y,z);
-        }
-        return nextPopulation;
-    }
-
     /* Tournament Selection return the winner of the tournament*/
-    // http://www2.sys-con.com/itsg/virtualcd/java/archives/0603/lacy/index.html
     private Individual tournamentSelection() 
     {   
         // Create a tournament population
