@@ -59,7 +59,7 @@ public class SphereEvaluation implements ContestEvaluation
 		double f = 10 - 10*( (function(ind)-ftarget_) / BASE_ ) ;
 		if(f>best_) best_ = f;
 		evaluations_++;
-		
+		System.out.println("Result: " + Double(f));
 		return new Double(f);
 	}
 

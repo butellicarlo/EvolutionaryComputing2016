@@ -2,7 +2,8 @@ package Collections;
 
 import org.vu.contest.ContestSubmission;
 import org.vu.contest.ContestEvaluation;
-
+import java.util.*;
+import java.lang.*;
 import java.util.Random;
 import java.util.Properties;
 
@@ -12,8 +13,14 @@ import java.util.*;
 
 public class player9 implements ContestSubmission
 {
-	Random rnd_;
-	ContestEvaluation evaluation_;
+    int POPULATION_SIZE = 100;
+    int SURVIVERS = 25; // number of surviving individuals from old generation
+    int FITSELECTION_SIZE = 40; // fit parent selection size
+    int RANDOMSELECTION_SIZE = 10; // random parents selection, exclude fit
+    double[] fitnesses = new double[POPULATION_SIZE]; // calculated fitnesses of each individual
+
+    Random rnd_;
+    ContestEvaluation evaluation_;
     private int evaluations_limit_;
 
     Random r = new Random();
@@ -46,20 +53,31 @@ public class player9 implements ContestSubmission
 		// Set seed of algortihms random process
 		rnd_.setSeed(seed);
 	}
+    
+    public player9()
+    {
+        rnd_ = new Random();
+    }
+    
+    public void setSeed(long seed)
+    {
+        // Set seed of algortihms random process
+        rnd_.setSeed(seed);
+    }
 
-	public void setEvaluation(ContestEvaluation evaluation)
-	{
-		// Set evaluation problem used in the run
-		evaluation_ = evaluation;
-		
-		// Get evaluation properties
-		Properties props = evaluation.getProperties();
+    public void setEvaluation(ContestEvaluation evaluation)
+    {
+        // Set evaluation problem used in the run
+        evaluation_ = evaluation;
+        
+        // Get evaluation properties
+        Properties props = evaluation.getProperties();
 
         // Get evaluation limit
         evaluations_limit_ = Integer.parseInt(props.getProperty("Evaluations"));
 
-		// Property keys depend on specific evaluation
-		// E.g. double param = Double.parseDouble(props.getProperty("property_name"));
+        // Property keys depend on specific evaluation
+        // E.g. double param = Double.parseDouble(props.getProperty("property_name"));
         boolean isMultimodal = Boolean.parseBoolean(props.getProperty("Multimodal"));
         boolean hasStructure = Boolean.parseBoolean(props.getProperty("Regular"));
         boolean isSeparable = Boolean.parseBoolean(props.getProperty("Separable"));
@@ -71,6 +89,9 @@ public class player9 implements ContestSubmission
 
 		/* Do sth with property values, e.g. specify relevant settings of your algorithm */
 		// If Modal
+        /* Do sth with property values, e.g. specify relevant settings of your algorithm */
+        // If Modal
+
         if(isMultimodal){
             // Do sth
         }else{
@@ -119,8 +140,6 @@ public class player9 implements ContestSubmission
             evals++;
             // Select survivors
 
-        }
-    }
 
     public double[][] generatePop(int size) {
         // makes a population of size = size, randomly assigned allels
@@ -243,7 +262,7 @@ public class player9 implements ContestSubmission
         for (int i=0; i<fitnesses.length; i++){
             if (fitnesses[i] == fitness) return i;
         }
-    }
+
 }
 
 
