@@ -3,68 +3,68 @@ import java.util.*;
 
 public class Individual {
 
-    int defaultSize = 10;
-    double fitness = 0;
-    double[] genotype;
-    Random r = new Random();
+	private static int genomSize = 10;
+	private double fitness = 0;
+	private double[] genotype;
+	private Random r = new Random();
 
+	/* Constructor */
+	public Individual() {
+		// boolean random should decide if random allels will be created or if
+		genotype = new double[genomSize];
+	}
 
+	public double[] getGenotype() {
+		return genotype;
+	}
 
-    /* Constructur */
-    public Individual(){
-        // boolean random should decide if random allels will be created or if
-        genotype = new double[defaultSize];
-    }
+	public void setRandomGenotype() {
+		for (int i = 0; i < genomSize; i++) {
+			genotype[i] = -5.0 + r.nextDouble() * 10;
+		}
+	}
 
-    public double[] getGenotype(){
-        return genotype;
-    }
+	public Individual copyIndividual() {
+		Individual newIndividual = new Individual();
+		for (int i = 0; i < genomSize; i++) {
+			newIndividual.changeFeature(i, genotype[i]);
+		}
+		return newIndividual;
+	}
 
-    public void setGenotypeRandom(){
-        
-        for (int i = 0; i < defaultSize; i++) {
-            genotype[i] = -5.0 + r.nextDouble() * 10; 
-            }
-    }
+	/* get individual's feature */
+	public double getFeature(int index) {
+		return genotype[index];
+	}
 
-    public Individual copyIndividual(){
-        Individual newIndividual = new Individual();
-        for(int i=0;i<defaultSize;i++){
-            newIndividual.changeFeature(i, genotype[i]);
-        }
-        return newIndividual;
-    }
+	/* save fitness for this individual */
+	public void saveFitness(double fit) {
+		this.fitness = fit;
+	}
 
-    /*get individual's feature*/
-    public double getFeature(int index) {
-        return genotype[index];
-    }
+	/* get fitness */
+	public double getFitness() {
+		return fitness;
+	}
 
-    /* save fitness for this individual*/
-    public void saveFitness(double fit) {
-        this.fitness = fit;
-    }
+	public int size() {
+		return genotype.length;
+	}
 
-    /* get fitness */
-    public double getFitness(){
-        return fitness;
-    }
+	public void changeFeature(int index, double value) {
+		genotype[index] = value;
+		fitness = 0;
+	}
 
-    public int size(){
-        return genotype.length;
-    }
-
-    public void changeFeature(int index, double value){
-        genotype[index] = value;
-        fitness = 0;
-    }
-    public void print(){
-        System.out.print("[");
-        for (int i = 0; i <size();i++){
-            System.out.print(", ");
-            System.out.print(getFeature(i));
-        }
-        System.out.println("]\n");
-    }
+	public void print() {
+		System.out.print("[");
+		for (int i = 0; i < size(); i++) {
+			if (i != 0) {
+				System.out.print(", ");
+			}
+			System.out.print(getFeature(i));
+		}
+		System.out.println("]\n");
+	}
 
 }
