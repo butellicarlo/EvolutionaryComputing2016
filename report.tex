@@ -1,67 +1,72 @@
-\documentclass[11pt,a4paper]{article}
+\documentclass[runningheads,a4paper]{llncs}
+
 \usepackage{amssymb}
-\usepackage{url}
-\usepackage{aeguill}
-\usepackage{listings} 
-\usepackage{booktabs}
-\usepackage{array}
-\usepackage[left=27mm,right=27mm,top=26mm,bottom=26mm]{geometry}
-\usepackage[english]{babel}
-\usepackage[T1]{fontenc}
-\usepackage[ansinew]{inputenc}
-\usepackage{float}
-\usepackage{verbatim}
-\usepackage[hyper]{apacite} % for apa bibliography style
-\usepackage[pdftex,bookmarks=true]{hyperref} % for hyperlinks and document meta data in pdf output
-\usepackage{titlesec}
-\usepackage{comment}
+\setcounter{tocdepth}{3}
 \usepackage{graphicx}
+\usepackage{cite}
+\usepackage{fixltx2e}
+\usepackage{float}
+\usepackage{url}  
+\usepackage{blindtext}
+\usepackage{scrextend}
 
-\selectlanguage{english}
+\addtokomafont{labelinglabel}{\sffamily}
 
-%\pagestyle{headings}
+\newcommand{\keywords}[1]{\par\addvspace\baselineskip
+\noindent\keywordname\enspace\ignorespaces#1}
 
-\title{
-\large{Evolutionary Computing (X\_400111)}\\
-	\vspace{8mm}
-	\begin{Huge} Contest \end{Huge}\\
-	\vspace{3mm}
-	\begin{huge} Team 9\\
-	\end{huge}
-	\vspace{5mm}
-	\center\textbf{Team Members:}
-}
+\begin{document}
 
-\date{\begin{flushright}\today\end{flushright}}  
+\mainmatter  % start of an individual contribution
 
+% first the title is needed
+\title{Evolutionary Computing\\Assignment 2016}
+
+% the name(s) of the author(s) follow(s) next
+%
 \author{
   Butelli, Carlo\\
-  \texttt{-}\\
-  \texttt{-}
+  \texttt{2556020}\\
+  \texttt{cbi330}
   \and
   Degott, Christian\\
   \texttt{2597328}\\
   \texttt{cdt260}
    \and
   Kada, Yasmina\\
-  \texttt{-}\\
+  \texttt{2522989}\\
   \texttt{-}
 }
-                                                                 
-%\makeindex
+%
 
-\begin{document}
+% the affiliations are given next; don't give your e-mail address
+% unless you accept that it will be published
+\institute{VU University Amsterdam, Computer Science Editorial,\\
+De Boelelaan 1105, 1081 HV Amsterdam, Netherlands}
 
+%
+% NB: a more complex sample for affiliations and the mapping to the
+% corresponding authors can be found in the file "llncs.dem"
+% (search for the string "\mainmatter" where a contribution starts).
+% "llncs.dem" accompanies the document class "llncs.cls".
+%
 \maketitle
+\section{Introduction}
+\cite{eiben2003introduction}
 
-\begin{flushleft}
-%\textbf{Lecturer:} prof. dr. A.E. Eiben
-\end{flushleft}
+%related work
+\section{Section 1}
+ 
+\section{Section 2}
 
-\thispagestyle{empty}
+\section{Conclusion}
 
-\newpage
+\bibliography{mybib}{}
+\bibliographystyle{plain}
 
-\section{Our implementation}
+\appendix
 
-\end{document}
+% a critical reflection of cooperation within the team
+
+\end{document}
+
