@@ -2,10 +2,10 @@ import java.util.*;
 
 public class Population extends Individual {
 
-	Individual[] population;
-	Random r = new Random();
-	double f = 0.5; // parameter
-	double cr = 0.5; // cross-over rate/possibility.
+	private Individual[] population;
+	Random r = new Random(); // TODO: use method in player9.java
+	private double f = 0.5; // parameter
+	private double cr = 0.5; // cross-over rate/possibility.
 
 	/* Constructor */
 	public Population(int size, boolean random_init) {
@@ -18,7 +18,7 @@ public class Population extends Individual {
 		}
 	}
 
-	public int populationSize() {
+	public int getPopulationSize() {
 		return population.length;
 	}
 
@@ -51,10 +51,9 @@ public class Population extends Individual {
 	}
 
 	public void printPopulation() {
-		for (int i = 0; i < populationSize(); i++) {
-			for (int j = 0; j < population[i].size(); j++) {
-				System.out.print(population[i].getFeature(j) + "_");
-			}
+		for (int i = 0; i < getPopulationSize(); i++) {
+			System.out.println("Current population");
+			population[i].print();
 			System.out.println("\n");
 		}
 	}
@@ -69,7 +68,7 @@ public class Population extends Individual {
 		 * mutated population p = F * (y-z) x' = x + p
 		 * 
 		 * This population will then recombine with the original population with
-		 * Cr (crossover rate for uniform crossover, with at least 1 allel op
+		 * cr (crossover rate for uniform crossover, with at least 1 allel of
 		 * the parent)
 		 * 
 		 * From the parents and children list (deterministic elitist -> only the
@@ -81,33 +80,32 @@ public class Population extends Individual {
 		Individual parent;
 		int forcedCrossoverIndex;
 
-		Population children = new Population(populationSize(), false);
+		Population children = new Population(getPopulationSize(), false);
 
 		double c; // chance, to be compared with cr
-		for (int i = 0; i < populationSize(); i++) {
-			// pick x,y,z from the population and create
-			x = getIndividual(r.nextInt(populationSize())).copyIndividual();
-			y = getIndividual(r.nextInt(populationSize()));
-			z = getIndividual(r.nextInt(populationSize()));
+		for (int i = 0; i < getPopulationSize(); i++) {
+			// Pick x,y,z from the population and create
+			x = getIndividual(r.nextInt(getPopulationSize())).copyIndividual();
+			y = getIndividual(r.nextInt(getPopulationSize()));
+			z = getIndividual(r.nextInt(getPopulationSize()));
 			mutateX(x, y, z);
 
 			parent = population[i];
 
-			// make child
+			// Make child
 			forcedCrossoverIndex = r.nextInt(10);
-			// One allel/feature of the parent needs to be kept according to the
-			// theory
+			// One allel/feature of the parent needs to be kept according to the theory
 			x.changeFeature(forcedCrossoverIndex, parent.getFeature(forcedCrossoverIndex));
 			for (int j = 0; j < x.size(); j++) {
 				c = r.nextDouble();
 
 				if (c > cr && j != forcedCrossoverIndex) {
-					// take feature from parent
+					// Take feature from parent
 					x.changeFeature(j, parent.getFeature(j));
 				}
 			}
 
-			// add child to children (population object)
+			// Add child to children (population object)
 			children.changeIndividual(i, x);
 		}
 

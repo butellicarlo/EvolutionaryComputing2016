@@ -1,25 +1,23 @@
 import org.vu.contest.ContestSubmission;
 import org.vu.contest.ContestEvaluation;
-import java.util.*;
-import java.lang.*;
 import java.util.Random;
 import java.util.Properties;
 
 public class player9 implements ContestSubmission {
 
 	private static int POPULATION_SIZE = 100;
-	private static int SURVIVERS = 25; // number of surviving individuals from
-										// old generation
-	private static int FITSELECTION_SIZE = 40; // fit parent selection size
-	private static int RANDOMSELECTION_SIZE = 10; // random parents selection,
-													// exclude fit
-	private double[] fitnesses = new double[POPULATION_SIZE]; // calculated
-																// fitness
-	// values of each // individual
+	private static int SURVIVERS = 25; // Number of surviving individuals from old generation
+	private static int FITSELECTION_SIZE = 40; // Fit parent selection size
+	private static int RANDOMSELECTION_SIZE = 10; // Random parents selection, exclude fit
+	private double[] fitnesses = new double[POPULATION_SIZE]; // Calculated fitness values of each individual
 
 	private Random rnd;
 	private ContestEvaluation evaluation;
 	private int evaluations_limit;
+	// Evaluation properties
+	private boolean isMultimodal;
+	private boolean hasStructure;
+	private boolean isSeparable;
 
 	public player9() {
 		rnd = new Random();
@@ -40,42 +38,16 @@ public class player9 implements ContestSubmission {
 		// Get evaluation limit
 		this.evaluations_limit = Integer.parseInt(props.getProperty("Evaluations"));
 
-		// Property keys depend on specific evaluation
-		// E.g. double param =
-		// Double.parseDouble(props.getProperty("property_name"));
-		boolean isMultimodal = Boolean.parseBoolean(props.getProperty("Multimodal"));
-		boolean hasStructure = Boolean.parseBoolean(props.getProperty("Regular"));
-		boolean isSeparable = Boolean.parseBoolean(props.getProperty("Separable"));
-
-		/*
-		 * Do sth with property values, e.g. specify relevant settings of your
-		 * algorithm
-		 */
-		// If Modal
-		if (isMultimodal) {
-			// Do sth
-		} else {
-			// Do sth else
-		}
-
-		// If has strong structure
-		if (hasStructure) {
-			// Do sth
-		} else {
-			// Do sth else
-		}
-
-		// If is separable
-		if (isSeparable) {
-			// Do sth
-		} else {
-			// Do sth else
-		}
+		isMultimodal = Boolean.parseBoolean(props.getProperty("Multimodal"));
+		hasStructure = Boolean.parseBoolean(props.getProperty("Regular"));
+		isSeparable = Boolean.parseBoolean(props.getProperty("Separable"));
+		// Do sth with property values, e.g. specify relevant settings of the
+		// algorithm
 	}
 
 	public void run() {
-		
-		// init starting population
+
+		// Init first generation
 		int evals = 0;
 		Population population = new Population(POPULATION_SIZE, true);
 		Population children;
@@ -89,7 +61,7 @@ public class player9 implements ContestSubmission {
 
 		boolean checkFitness = true;
 
-		// calculate fitness
+		// Calculate fitness
 		while (evals < evaluations_limit) {
 
 			// Select parents
@@ -98,7 +70,8 @@ public class player9 implements ContestSubmission {
 			children = population.getMutatedPopulation();
 
 			// Check fitness of each child
-			for (int i = 0; i < children.populationSize(); i++) {
+			for (int i = 0; i < children.getPopulationSize(); i++) {
+				
 				Individual child = children.getIndividual(i);
 				Individual parent = population.getIndividual(i);
 
@@ -106,14 +79,13 @@ public class player9 implements ContestSubmission {
 				evals++;
 				child.saveFitness(fitness);
 
-				// if (evals < 5) {
+				// TODO: remove debug print
 				// children.getIndividual(i).print();
-				// }
 
-				// select survivor (parent or child, the one with the highest
-				// fitness)
+				// Select survivor (parent or child, the one with the highest fitness)
+				// TODO: Elitist survivor selection might lead to premature convergence?
 				if (child.getFitness() >= parent.getFitness()) {
-					// take child into population
+					// Take child into population
 					population.changeIndividual(i, child);
 				}
 			}
@@ -125,6 +97,7 @@ public class player9 implements ContestSubmission {
 	 * Randomly chose the index (numbers between start-end) of the individuals
 	 * to be chosen
 	 */
+	// TODO: method is unused at the moment!
 	public int[] randomIndividualSelection(int startIndex, int endIndex, int n) {
 		Random r = new Random();
 		int[] individualsIndex = new int[n];
