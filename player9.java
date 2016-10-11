@@ -17,17 +17,17 @@ public class player9 implements ContestSubmission {
 																// fitness
 	// values of each // individual
 
-	private Random rnd_;
+	private Random rnd;
 	private ContestEvaluation evaluation;
 	private int evaluations_limit;
 
 	public player9() {
-		rnd_ = new Random();
+		rnd = new Random();
 	}
 
 	public void setSeed(long seed) {
 		// Set seed of algorithm's random process
-		rnd_.setSeed(seed);
+		rnd.setSeed(seed);
 	}
 
 	public void setEvaluation(ContestEvaluation evaluation) {
@@ -74,28 +74,23 @@ public class player9 implements ContestSubmission {
 	}
 
 	public void run() {
-
-		// Run your algorithm here
-		int evals = 0;
-
+		
 		// init starting population
+		int evals = 0;
 		Population population = new Population(POPULATION_SIZE, true);
 		Population children;
 		Double fitness;
-		/* Calculate fitness values of the first random population */
-		for (double d : fitnesses) {
-
-		}
-
+		// Calculate fitness values of the first random population
 		for (int i = 0; i < POPULATION_SIZE; i++) {
 			fitness = (double) evaluation.evaluate(population.getGenotype(i));
+			evals++;
 			population.getIndividual(i).saveFitness(fitness);
 		}
 
 		boolean checkFitness = true;
 
 		// calculate fitness
-		while (evals < evaluations_limit - POPULATION_SIZE) {
+		while (evals < evaluations_limit) {
 
 			// Select parents
 			// Apply crossover / mutation operators
@@ -108,6 +103,7 @@ public class player9 implements ContestSubmission {
 				Individual parent = population.getIndividual(i);
 
 				fitness = (double) evaluation.evaluate(children.getGenotype(i));
+				evals++;
 				child.saveFitness(fitness);
 
 				// if (evals < 5) {
@@ -120,7 +116,6 @@ public class player9 implements ContestSubmission {
 					// take child into population
 					population.changeIndividual(i, child);
 				}
-				evals++;
 			}
 
 		}
