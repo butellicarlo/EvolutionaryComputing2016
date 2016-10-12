@@ -1,6 +1,6 @@
 #!/bin/bash
-javac -cp contest.jar player9.java Individual.java Population.java
-jar cmf MainClass.txt submission.jar player9.class Individual.class Population.class
+javac -cp contest.jar player9.java Individual.java Population.java EvaluationWrapper.java
+jar cmf MainClass.txt submission.jar player9.class Individual.class Population.class EvaluationWrapper.class
 
 case "$1" in
         1)
