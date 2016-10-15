@@ -9,7 +9,7 @@ public class Population extends Individual
     Individual[] population;
     Random r = new Random();
     double f = 0.3; // parameter
-    double cr = 0.3; // cross-over rate/possibility. 
+    double cr = 0.38; // cross-over rate/possibility. 
     int tournament_size = 20; // tournament selection
 
     /* Constructur */
@@ -105,6 +105,16 @@ public class Population extends Individual
         return fitnesses;
     }
 
+    public double averagePopulation()
+    {   
+        double sum = 0;
+        for(int i = 0; i < population.length; i++)
+        {
+            sum += population[i].getFitness();
+        }
+        return sum / population.length;
+    }
+
     public void printPopulation() 
     {
         for (int i = 0; i < populationSize(); i++) 
@@ -147,16 +157,6 @@ public class Population extends Individual
 
     public Population getMutatedPopulation()
     {
-        /* 
-            Three random individuals are randomly chosen x,y,z to create an mutated population
-            p = F * (y-z)
-            x' = x + p
-
-            This population will then recombinate with the original population
-            with Cr (crossover rate for uniform crossover, with at least 1 allel op the parent)
-
-            From the parents and children list (deterministic elitist -> only the best is chosen)
-        */
         Individual x; // will be the child
         Individual y;
         Individual z;
@@ -164,32 +164,33 @@ public class Population extends Individual
         double c; //chance, to be compared with cr
 
         Population children = new Population(populationSize(), false);
+        // Maintain the fittest from prev pop
         //children.changeIndividual(0, findFittest());
 
         /* Maintain the 5 individuals with higher fitnesses from previous population*/
         double[] fitnesses = this.orderFitnesses();
-        for(int i = 0; i < 5; i++)
+        for(int i = 0; i < 20; i++)
         {
-            Individual fit = getIndividualFromFitness(fitnesses[fitnesses.length - (i+1)]);
-            children.changeIndividual(i, fit);
+            Individual fits = getIndividualFromFitness(fitnesses[fitnesses.length - (i+1)]);
+            children.changeIndividual(i, fits);
         }
 
-        /* Select the other 15th individuals with tournament selection */
-        for(int i = 5; i < 25; i++)
+        /* Select the other individuals with tournament selection */
+        for(int i = 20; i < 50; i++)
         {
             children.changeIndividual(i, tournamentSelection());
         }
 
         /* Get the other 80th individuals in the Yasmina's way */
-        for(int i = 25; i < populationSize(); i++)
+        for(int i = 50, s = 0; i < populationSize(); i++, s++)
         {
             // pick x,y,z from the population and create
-            x = getIndividual(r.nextInt(populationSize())).copyIndividual(); //this.tournamentSelection().copyIndividual();
+            x = children.getIndividual(0); //getIndividual(r.nextInt(populationSize())).copyIndividual(); //this.tournamentSelection().copyIndividual();
             y = getIndividual(r.nextInt(populationSize())); //this.tournamentSelection();
             z = getIndividual(r.nextInt(populationSize())); //crossover(x,y);
             mutateX(x,y,z);
 
-            parent = population[i];
+            parent = children.getIndividual(s);
 
             //make child
             for(int j = 0; j < x.size(); j++)
