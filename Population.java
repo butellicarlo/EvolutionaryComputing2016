@@ -1,6 +1,7 @@
 import java.util.Random;
 import java.util.Arrays;
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class Population extends Individual
 {
@@ -9,7 +10,7 @@ public class Population extends Individual
     Random r = new Random();
     double f = 0.3; // parameter
     double cr = 0.3; // cross-over rate/possibility. 
-    int tournament_size = 10; // tournament selection
+    int tournament_size = 20; // tournament selection
 
     /* Constructur */
     public Population(int size, boolean flag)
@@ -116,10 +117,33 @@ public class Population extends Individual
         }
     }
 
+    public Individual getIndividualFromFitness(double fitness)
+    {
+        Individual ind = new Individual();
+        for(int i = 0; i < populationSize(); i++)
+        {
+            if(fitness == this.getFitness())
+                ind = this.getIndividual(i);
+        }
+         return ind;
+    }
+
     public void changeIndividual(int index, Individual x)
     {
         population[index] = x;
     }
+
+    /*public Individual[] get5Fittests()
+    {   
+        int dim = 5;
+        double[] fitnesses = new double[populationSize()];
+        double[] fittests = new double[dim];
+        for(int i = 0; i < populationSize(); i++)
+        {
+            fitnesses[i] = population[i].getFitness();
+        }
+
+    }*/
 
     public Population getMutatedPopulation()
     {
@@ -140,20 +164,35 @@ public class Population extends Individual
         double c; //chance, to be compared with cr
 
         Population children = new Population(populationSize(), false);
-        children.changeIndividual(0, findFittest());
+        //children.changeIndividual(0, findFittest());
 
-        for(int i = 1; i < populationSize(); i++)
+        /* Maintain the 5 individuals with higher fitnesses from previous population*/
+        double[] fitnesses = this.orderFitnesses();
+        for(int i = 0; i < 5; i++)
+        {
+            Individual fit = getIndividualFromFitness(fitnesses[fitnesses.length - (i+1)]);
+            children.changeIndividual(i, fit);
+        }
+
+        /* Select the other 15th individuals with tournament selection */
+        for(int i = 5; i < 25; i++)
+        {
+            children.changeIndividual(i, tournamentSelection());
+        }
+
+        /* Get the other 80th individuals in the Yasmina's way */
+        for(int i = 25; i < populationSize(); i++)
         {
             // pick x,y,z from the population and create
-            x = this.tournamentSelection().copyIndividual();//getIndividual(r.nextInt(populationSize())).copyIndividual();
-            y = this.tournamentSelection();//getIndividual(r.nextInt(populationSize()));
-            z = crossover(x,y); //getIndividual(r.nextInt(populationSize()));
+            x = getIndividual(r.nextInt(populationSize())).copyIndividual(); //this.tournamentSelection().copyIndividual();
+            y = getIndividual(r.nextInt(populationSize())); //this.tournamentSelection();
+            z = getIndividual(r.nextInt(populationSize())); //crossover(x,y);
             mutateX(x,y,z);
 
             parent = population[i];
 
             //make child
-            for(int j=0;j<x.size();j++)
+            for(int j = 0; j < x.size(); j++)
             {
                 c = r.nextDouble();
                 
@@ -200,7 +239,7 @@ public class Population extends Individual
         // Create a tournament population
         Population tournament = new Population(tournament_size, false);
 
-        // For each place in the tournament get a random individual
+        //c For each place in the tournament get a random individual
         for (int i = 0; i < tournament_size; i++) 
         {
             int index = (int) (Math.random() * population.length);
@@ -228,21 +267,6 @@ public class Population extends Individual
             }
         }
         return newIndividual;
-    }
-
-    // Mutate an individual
-    private void mutatePopulation(Individual ind) 
-    {
-        // Loop through genes
-        for (int i = 0; i < ind.size(); i++) 
-        {
-            if (Math.random() <= 0.15) 
-            {
-                // Create random gene
-                double genotype = -5.0 + r.nextDouble() * 10; 
-                ind.changeFeature(i, genotype);
-            }
-        }
     }
 
 }
