@@ -23,31 +23,45 @@ public class Population {
 	}
 
 	public Population createChildGeneration(Random rand) {
+		
 		Individual[] new_generation = new Individual[this.size];
 		for (int i = 0; i < this.size; i++) {
-			Individual rand_individual1 = this.population[rand.nextInt(this.size)];
-			Individual rand_individual2 = this.population[rand.nextInt(this.size)];
-			// TODO: re-think the way mutation works
-			Individual mutated_individual = rand_individual1.mutate(rand_individual2);
-			// TODO: select parents based on their fitness
-			// TODO: make sure crossover of two times the same individual does
-			// not occur
+			
+			// Pick random individuals
+			Individual[] individuals = this.randomIndividuals(5, rand);
+			Individual x = individuals[0];
+
+			Individual y_1 = individuals[1];
+			Individual z_1 = individuals[2];
+			Individual y_2 = individuals[3];
+			Individual z_2 = individuals[4];
+			
+			// Mutate (2)
+			Individual x_2 = x.mutate(y_1, z_1, y_2, z_2);
+			
+			// Crossover (bin)
 			Individual parent = this.population[i];
-			new_generation[i] = parent.crossover(mutated_individual, rand);
+			new_generation[i] = x_2.crossover(parent, rand);
 		}
 		return new Population(new_generation);
 	}
+	
+	private Individual[] randomIndividuals(int n, Random rand) {
+		// TODO: Do not pick same individual more than once
+		Individual[] individuals = new Individual[n];
+		for (int i = 0; i < n; i++) {
+			individuals[i] = this.population[rand.nextInt(this.size)];
+		}
+		return individuals;
+	}
 
-	public Population selectSurvivors(Population other, ContestEvaluation evaluation, Random rand) {
-		// TODO: keep diversity:
-		// give fit individual higher probability to survive but not make an
-		// pure elitist selection
+	public Population selectSurvivors(Population child, ContestEvaluation evaluation, Random rand) {
 		Individual[] survivors = new Individual[this.size];
 		for (int i = 0; i < this.size; i++) {
-			if (this.population[i].getFitness(evaluation) > other.population[i].getFitness(evaluation)) {
-				survivors[i] = this.population[i];
+			if (child.population[i].getFitness(evaluation) >= this.population[i].getFitness(evaluation)) {
+				survivors[i] = child.population[i];
 			} else {
-				survivors[i] = other.population[i];
+				survivors[i] = this.population[i];
 			}
 		}
 		return new Population(survivors);

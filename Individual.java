@@ -4,14 +4,14 @@ import java.util.Random;
 import org.vu.contest.ContestEvaluation;
 
 public class Individual {
+	
+	private static double F = 0.5; // parameter
+	private static double CR = 0.5; // cross-over rate/possibility
 
 	private static int GENOM_SIZE = 10;
-	private static int UNKNOWN = -1;
-
-	private static double F = 0.5; // parameter
-	private static double CROSSOVER_RATE = 0.5; // cross-over rate/possibility.
-
 	private final double[] genotype;
+	
+	private static int UNKNOWN = -1;
 	private double fitness = UNKNOWN;
 
 	public Individual(Random rand) {
@@ -47,29 +47,45 @@ public class Individual {
 		return this.fitness;
 	}
 
-	public Individual mutate(Individual other) {
+	/*
+	 * DE mutation 1
+	 */
+	public Individual mutate(Individual y, Individual z) {
 		double[] new_genotype = new double[GENOM_SIZE];
 		for (int i = 0; i < GENOM_SIZE; i++) {
-			double p = F * (this.genotype[i] - other.genotype[i]);
-			new_genotype[i] = cutValue(p);
+			double p = F * (y.genotype[i] - z.genotype[i]);
+			double feature = this.genotype[i] + p;
+			new_genotype[i] = cutValue(feature);
 		}
 		return new Individual(new_genotype);
 	}
 
-	public Individual crossover(Individual other, Random rand) {
+	/*
+	 * DE mutation 2
+	 */
+	public Individual mutate(Individual y_1, Individual z_1, Individual y_2, Individual z_2) {
 		double[] new_genotype = new double[GENOM_SIZE];
 		for (int i = 0; i < GENOM_SIZE; i++) {
-			new_genotype[i] = this.genotype[i];
+			double p = F * (y_1.genotype[i] - z_1.genotype[i] + y_2.genotype[i] - z_2.genotype[i]);
+			double feature = this.genotype[i] + p;
+			new_genotype[i] = cutValue(feature);
 		}
-		int forcedCrossoverIndex = rand.nextInt(GENOM_SIZE);
-		// One allel/feature needs to be kept according to the theory
-		new_genotype[forcedCrossoverIndex] = other.genotype[forcedCrossoverIndex];
+		return new Individual(new_genotype);
+	}
 
-		for (int j = 0; j < GENOM_SIZE; j++) {
+	/*
+	 * DE crossover bin
+	 */
+	public Individual crossover(Individual parent, Random rand) {
+		double[] new_genotype = new double[GENOM_SIZE];
+		int forcedCrossoverIndex = rand.nextInt(GENOM_SIZE);
+		for (int i = 0; i < GENOM_SIZE; i++) {
 			double c = rand.nextDouble();
-			if (c > CROSSOVER_RATE && j != forcedCrossoverIndex) {
+			if (c > CR || i == forcedCrossoverIndex) {
 				// Take feature from parent
-				new_genotype[forcedCrossoverIndex] = other.genotype[forcedCrossoverIndex];
+				new_genotype[i] = parent.genotype[i];
+			} else {
+				new_genotype[i] = this.genotype[i];
 			}
 		}
 		return new Individual(new_genotype);

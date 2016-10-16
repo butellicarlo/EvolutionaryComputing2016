@@ -25,7 +25,7 @@ public class player9 implements ContestSubmission {
 	}
 
 	private int getPopulationSize() {
-		// TODO: implement Yasmina's idea:
+		// TODO: Implement Yasmina's idea:
 		// make the size of the population bigger/smaller according to the
 		// maximum number of evaluations
 		return POPULATION_SIZE;
@@ -39,7 +39,6 @@ public class player9 implements ContestSubmission {
 		while (evaluation.hasEvaluationsLeft()) {
 
 			// Select parents
-			// TODO: implement parent selection
 			// Apply crossover / mutation operators
 			Population new_generation = population.createChildGeneration(rand);
 
