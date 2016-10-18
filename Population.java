@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import org.vu.contest.ContestEvaluation;
@@ -47,10 +49,14 @@ public class Population {
 	}
 	
 	private Individual[] randomIndividuals(int n, Random rand) {
-		// TODO: Do not pick same individual more than once
 		Individual[] individuals = new Individual[n];
+		List<Integer> ints = new ArrayList<Integer>();
 		for (int i = 0; i < n; i++) {
-			individuals[i] = this.population[rand.nextInt(this.size)];
+			int r = rand.nextInt(this.size);
+			while (ints.contains(r))
+				r = rand.nextInt(this.size);
+			ints.add(r);
+			individuals[i] = this.population[r];
 		}
 		return individuals;
 	}
