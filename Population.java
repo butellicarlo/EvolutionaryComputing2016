@@ -1,10 +1,11 @@
+import java.util.Arrays;
 import java.util.Random;
 
 import org.vu.contest.ContestEvaluation;
 
 public class Population {
 
-	private final Individual[] population;
+	private Individual[] population;
 	private int size;
 
 	public Population(int size, Random rand) {
@@ -26,11 +27,38 @@ public class Population {
 		return size;
 	}
 
-	public double getFitness(ContestEvaluation evaluation) {
+	public void sort(ContestEvaluation evaluation) {
+		// Need to evaluate fitness before sorting
+		evaluateFitness(evaluation);
+		Arrays.sort(this.population);
+	}
+
+	public void evaluateFitness(ContestEvaluation evaluation) {
+		for (Individual individual : population) {
+			individual.evaluateFitness(evaluation);
+		}
+	}
+
+	public double getBestFitness(ContestEvaluation evaluation) {
 		double max = Double.MIN_VALUE;
 		for (Individual individual : population) {
 			max = Double.max(max, individual.getFitness(evaluation));
 		}
 		return max;
+	}
+
+	public double getAverageFitness(ContestEvaluation evaluation) {
+		double sum = 0.0;
+		for (int i = 0; i < size; i++) {
+			sum += population[i].getFitness(evaluation);
+		}
+		return sum / size;
+	}
+
+	public void print() {
+		for (int i = 0; i < size; i++) {
+			System.out.print("Individual " + i + ":");
+			population[i].print();
+		}
 	}
 }

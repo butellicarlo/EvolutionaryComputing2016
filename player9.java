@@ -5,7 +5,7 @@ import java.util.Random;
 
 public class player9 implements ContestSubmission {
 
-	private static int POPULATION_SIZE = 100;
+	private static int POPULATION_SIZE = 10;
 
 	private Random rand;
 	private EvaluationWrapper evaluation;
@@ -30,7 +30,15 @@ public class player9 implements ContestSubmission {
 		Population population = new Population(POPULATION_SIZE, rand);
 
 		// Calculate fitness
-		double fitness = population.getFitness(evaluation);
+		double best = population.getBestFitness(evaluation);
+		System.out.println("Best fitness: " + best);
+		double average = population.getAverageFitness(evaluation);
+		System.out.println("Average fitness: " + average);
+		
+		// Sort population by fitness
+		population.sort(evaluation);
+		System.out.println("Sorted population:\n");
+		population.print();
 
 		while (evaluation.hasEvaluationsLeft()) {
 
@@ -38,7 +46,7 @@ public class player9 implements ContestSubmission {
 			// Apply crossover / mutation operators
 
 			// Select survivors
-		}
 
+		}
 	}
 }

@@ -6,6 +6,12 @@ public class Matrix {
 	private int N; // number of columns
 	private double[][] data; // M-by-N array
 
+	/**
+	 * Create new M-by-N matrix
+	 * 
+	 * @param M
+	 * @param N
+	 */
 	public Matrix(int M, int N) {
 		this.M = M;
 		this.N = N;
@@ -23,12 +29,12 @@ public class Matrix {
 		}
 	}
 
-	public int getNDimension() {
-		return N;
-	}
-
 	public int getMDimension() {
 		return M;
+	}
+
+	public int getNDimension() {
+		return N;
 	}
 
 	public double getValue(int row, int column) {
@@ -51,7 +57,7 @@ public class Matrix {
 	 * @param N
 	 * @return I (N-by-N)
 	 */
-	public static Matrix identity(int N) {
+	public static Matrix Identity(int N) {
 		Matrix I = new Matrix(N, N);
 		for (int i = 0; i < N; i++) {
 			I.data[i][i] = 1.0;

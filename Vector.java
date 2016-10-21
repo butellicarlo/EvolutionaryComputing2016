@@ -5,6 +5,11 @@ public class Vector {
 	private int N; // dimension
 	private double[] data;
 
+	/**
+	 * Create new N-dimensional vector
+	 * 
+	 * @param N
+	 */
 	public Vector(int N) {
 		this.N = N;
 		data = new double[N];

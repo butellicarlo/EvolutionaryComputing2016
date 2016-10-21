@@ -3,7 +3,7 @@ import java.util.Random;
 
 import org.vu.contest.ContestEvaluation;
 
-public class Individual {
+public class Individual implements Comparable<Individual> {
 
 	private static int GENOM_SIZE = 10;
 	private static double MIN_VALUE = -5.0;
@@ -25,21 +25,19 @@ public class Individual {
 		this.genotype = genotype;
 	}
 
-	public Individual(Individual other) {
-		this.genotype = new double[GENOM_SIZE];
-		for (int i = 0; i < GENOM_SIZE; i++) {
-			this.genotype[i] = other.genotype[i];
-		}
-	}
-
 	public double[] getGenotype() {
 		return genotype;
 	}
 
-	public double getFitness(ContestEvaluation evaluation) {
+	public void evaluateFitness(ContestEvaluation evaluation) {
+		// Evaluate not more than once!
 		if (this.fitness == UNKNOWN) {
 			this.fitness = (Double) evaluation.evaluate(genotype);
 		}
+	}
+
+	public double getFitness(ContestEvaluation evaluation) {
+		evaluateFitness(evaluation);
 		return this.fitness;
 	}
 
@@ -53,6 +51,15 @@ public class Individual {
 				return value;
 			}
 		}
+	}
+
+	@Override
+	public int compareTo(Individual other) {
+		if (this.fitness == UNKNOWN || other.fitness == UNKNOWN) {
+			throw new RuntimeException("evaluateFitness(..) not called before compareTo(..)");
+		}
+		Double fitness = this.fitness;
+		return fitness.compareTo(other.fitness);
 	}
 
 	@Override
@@ -91,5 +98,4 @@ public class Individual {
 		}
 		System.out.println("]\n");
 	}
-
 }
