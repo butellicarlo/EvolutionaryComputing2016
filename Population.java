@@ -1,5 +1,3 @@
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 import org.vu.contest.ContestEvaluation;
@@ -24,53 +22,15 @@ public class Population {
 		this.size = population.length;
 	}
 
-	public Population createChildGeneration(Random rand) {
-		
-		Individual[] new_generation = new Individual[this.size];
-		for (int i = 0; i < this.size; i++) {
-			
-			// Pick random individuals
-			Individual[] individuals = this.randomIndividuals(5, rand);
-			Individual x = individuals[0];
-
-			Individual y_1 = individuals[1];
-			Individual z_1 = individuals[2];
-			Individual y_2 = individuals[3];
-			Individual z_2 = individuals[4];
-			
-			// Mutate (2)
-			Individual x_2 = x.mutate(y_1, z_1, y_2, z_2);
-			
-			// Crossover (bin)
-			Individual parent = this.population[i];
-			new_generation[i] = x_2.crossover(parent, rand);
-		}
-		return new Population(new_generation);
-	}
-	
-	private Individual[] randomIndividuals(int n, Random rand) {
-		Individual[] individuals = new Individual[n];
-		List<Integer> ints = new ArrayList<Integer>();
-		for (int i = 0; i < n; i++) {
-			int r = rand.nextInt(this.size);
-			while (ints.contains(r))
-				r = rand.nextInt(this.size);
-			ints.add(r);
-			individuals[i] = this.population[r];
-		}
-		return individuals;
+	public int getSize() {
+		return size;
 	}
 
-	public Population selectSurvivors(Population child, ContestEvaluation evaluation, Random rand) {
-		Individual[] survivors = new Individual[this.size];
-		for (int i = 0; i < this.size; i++) {
-			if (child.population[i].getFitness(evaluation) >= this.population[i].getFitness(evaluation)) {
-				survivors[i] = child.population[i];
-			} else {
-				survivors[i] = this.population[i];
-			}
+	public double getFitness(ContestEvaluation evaluation) {
+		double max = Double.MIN_VALUE;
+		for (Individual individual : population) {
+			max = Double.max(max, individual.getFitness(evaluation));
 		}
-		return new Population(survivors);
+		return max;
 	}
-
 }

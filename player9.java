@@ -24,26 +24,20 @@ public class player9 implements ContestSubmission {
 		this.evaluation = new EvaluationWrapper(evaluation);
 	}
 
-	private int getPopulationSize() {
-		// TODO: Implement Yasmina's idea:
-		// make the size of the population bigger/smaller according to the
-		// maximum number of evaluations
-		return POPULATION_SIZE;
-	}
-
 	public void run() {
 
-		// Random first generation
-		Population population = new Population(this.getPopulationSize(), rand);
+		// Initialize population
+		Population population = new Population(POPULATION_SIZE, rand);
+
+		// Calculate fitness
+		double fitness = population.getFitness(evaluation);
 
 		while (evaluation.hasEvaluationsLeft()) {
 
 			// Select parents
 			// Apply crossover / mutation operators
-			Population new_generation = population.createChildGeneration(rand);
 
 			// Select survivors
-			population = population.selectSurvivors(new_generation, evaluation, rand);
 		}
 
 	}
