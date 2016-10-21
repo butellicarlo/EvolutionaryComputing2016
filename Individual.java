@@ -28,6 +28,10 @@ public class Individual implements Comparable<Individual> {
 	public double[] getGenotype() {
 		return genotype;
 	}
+	
+	public Vector getGenotypeAsVector() {
+		return new Vector(genotype);
+	}
 
 	public void evaluateFitness(ContestEvaluation evaluation) {
 		// Evaluate not more than once!

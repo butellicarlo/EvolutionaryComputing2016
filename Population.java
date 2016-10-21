@@ -31,6 +31,7 @@ public class Population {
 		// Need to evaluate fitness before sorting
 		evaluateFitness(evaluation);
 		Arrays.sort(this.population);
+		// this.population is now sorted by fitness
 	}
 
 	public void evaluateFitness(ContestEvaluation evaluation) {
