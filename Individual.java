@@ -10,7 +10,7 @@ public class Individual implements Comparable<Individual> {
 	private static double MAX_VALUE = 5.0;
 	private final double[] genotype;
 
-	private static double UNKNOWN = -1;
+	private static double UNKNOWN = Double.NaN;
 	private double fitness = UNKNOWN;
 
 	public Individual(Random rand) {

@@ -18,6 +18,17 @@ public class Matrix {
 		data = new double[M][N];
 	}
 
+	/**
+	 * Create new square N-by-N matrix
+	 * 
+	 * @param N
+	 */
+	public Matrix(int N) {
+		this.M = N;
+		this.N = N;
+		data = new double[N][N];
+	}
+
 	public Matrix(double[][] data) {
 		M = data.length;
 		N = data[0].length;
@@ -27,6 +38,10 @@ public class Matrix {
 				this.data[i][j] = data[i][j];
 			}
 		}
+	}
+
+	private Matrix(Matrix A) {
+		this(A.data);
 	}
 
 	public int getMDimension() {
@@ -173,6 +188,100 @@ public class Matrix {
 			}
 		}
 		return C;
+	}
+
+	/**
+	 * Swap rows i and j
+	 * 
+	 * @param i
+	 * @param j
+	 */
+	private void swap(int i, int j) {
+		double[] temp = data[i];
+		data[i] = data[j];
+		data[j] = temp;
+	}
+
+	/**
+	 * Matrix inversion using Gauss–Jordan elimination
+	 * 
+	 * @return this^-1
+	 */
+	public Matrix invert() {
+		if (M != N) {
+			throw new RuntimeException("Illegal matrix dimensions. Matrix must be square.");
+		}
+		Matrix X = new Matrix(N);
+		Matrix B = Matrix.Identity(N);
+		// Upper triangle form
+		int index[] = this.gaussian();
+		for (int i = 0; i < N - 1; ++i) {
+			for (int j = i + 1; j < N; ++j) {
+				for (int k = 0; k < N; ++k) {
+					B.data[index[j]][k] -= this.data[index[j]][i] * B.data[index[i]][k];
+				}
+			}
+		}
+		// Backward substitutions
+		for (int i = 0; i < N; ++i) {
+			X.data[N - 1][i] = B.data[index[N - 1]][i] / this.data[index[N - 1]][N - 1];
+			for (int j = N - 2; j >= 0; --j) {
+				X.data[j][i] = B.data[index[j]][i];
+				for (int k = j + 1; k < N; ++k) {
+					X.data[j][i] -= this.data[index[j]][k] * X.data[k][i];
+				}
+				X.data[j][i] /= this.data[index[j]][j];
+			}
+		}
+		return X;
+	}
+
+	/**
+	 * Partial-pivoting Gaussian elimination
+	 * 
+	 * @return
+	 */
+	private int[] gaussian() {
+		double c[] = new double[N];
+		int index[] = new int[N];
+		for (int i = 0; i < N; ++i) {
+			index[i] = i;
+		}
+		for (int i = 0; i < N; ++i) {
+			double c1 = 0;
+			for (int j = 0; j < N; ++j) {
+				double c0 = Math.abs(this.data[i][j]);
+				if (c0 > c1) {
+					c1 = c0;
+				}
+			}
+			c[i] = c1;
+		}
+		// Pivoting element from each column
+		int k = 0;
+		for (int j = 0; j < N - 1; ++j) {
+			double pi1 = 0;
+			for (int i = j; i < N; ++i) {
+				double pi0 = Math.abs(this.data[index[i]][j]);
+				pi0 /= c[index[i]];
+				if (pi0 > pi1) {
+					pi1 = pi0;
+					k = i;
+				}
+			}
+			// Interchange rows
+			int itmp = index[j];
+			index[j] = index[k];
+			index[k] = itmp;
+			for (int i = j + 1; i < N; ++i) {
+				double pj = this.data[index[i]][j] / this.data[index[j]][j];
+				this.data[index[i]][j] = pj;
+				for (int l = j + 1; l < N; ++l) {
+					this.data[index[i]][l] -= pj * this.data[index[j]][l];
+				}
+			}
+		}
+		return index;
 	}
 
 	@Override
