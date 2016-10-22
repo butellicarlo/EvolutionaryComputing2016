@@ -42,6 +42,19 @@ public class Vector {
 	}
 
 	/**
+	 * Zero vector
+	 * 
+	 * @return zero vector
+	 */
+	public static Vector zero(int N) {
+		double[] data = new double[N];
+		for (int i = 0; i < N; i++) {
+			data[i] = 0.0;
+		}
+		return new Vector(data);
+	}
+
+	/**
 	 * Vector-vector addition
 	 * 
 	 * @param y

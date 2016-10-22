@@ -57,10 +57,14 @@ public class player9 implements ContestSubmission {
 		Matrix C = Matrix.Identity(10); // I (10-by-10)
 
 		while (evaluation.hasEvaluationsLeft()) {
+			
+			Individual x[] = new Individual[lambda];
 
 			// Generate and evaluate lambda offspring
 			for (int i = 0; i < lambda; i++) {
-
+				// x[i] = m_k + signma_k * N(0,C_k)
+				// x[i] = m + Multivariate_normal_distribution.sample(0, C).multiply(sigma);
+				x[i].evaluateFitness(evaluation);
 			}
 
 			// Sort by fitness and compute weighted mean into xmean
@@ -72,9 +76,6 @@ public class player9 implements ContestSubmission {
 			// Adapt step size sigma
 
 			// Decomposition of C into B*diag(D.^2)*B' (diagonalization)
-
-			// Break, if fitness is good enough or condition exceeds 1e14,
-			// better termination methods are advisable
 
 		}
 	}
