@@ -40,10 +40,6 @@ public class Matrix {
 		}
 	}
 
-	private Matrix(Matrix A) {
-		this(A.data);
-	}
-
 	public int getMDimension() {
 		return M;
 	}
