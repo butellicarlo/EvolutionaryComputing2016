@@ -313,10 +313,15 @@ public class Matrix {
                 for (int k = 0; k < j; k++) {
                     sum += L.getValue(i, k) * L.getValue(j, k);
                 }
-                if (i == j) 
-                	L.setValue(i, i, Math.sqrt(V.getValue(i, i) - sum));
-                else 
-                	L.setValue(i, j, 1.0 / L.getValue(j, j) * (V.getValue(i,j) - sum));
+                if (i == j) {
+                	double tmp = V.getValue(i, i) - sum;
+                	if(tmp < 0)
+                		L.setValue(i, i, -1.0 * Math.sqrt(Math.abs(tmp)));
+                	else
+                		L.setValue(i, i, Math.sqrt(tmp));
+                } else {
+                	L.setValue(i, j, (1.0 / L.getValue(j, j)) * (V.getValue(i,j) - sum));
+                }
             }
         }
         return L;
