@@ -1,6 +1,8 @@
 import org.vu.contest.ContestSubmission;
 import org.vu.contest.ContestEvaluation;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.Random;
 
 public class player9 implements ContestSubmission {
@@ -54,20 +56,27 @@ public class player9 implements ContestSubmission {
 
 		// Initialization
 		int lambda = 5;
-		Matrix C = Matrix.Identity(10); // I (10-by-10)
+		int N = 10;
+		Matrix C = Matrix.Identity(N); // I (10-by-10)
+		double sigma = 0.3;     
+		Vector m = new Vector(N);
+		for (int i = 0; i < N; i++) {
+			m.setValue(i, rand.nextGaussian());
+		}
 
 		while (evaluation.hasEvaluationsLeft()) {
 			
+			// Generate and evaluate lambda offsprings
 			Individual x[] = new Individual[lambda];
-
-			// Generate and evaluate lambda offspring
 			for (int i = 0; i < lambda; i++) {
-				// x[i] = m_k + signma_k * N(0,C_k)
-				// x[i] = m + Multivariate_normal_distribution.sample(0, C).multiply(sigma);
+				// x[i] = N(m_k,sigma^2C)
+				x[i] = new Individual(Matrix.multivariateGaussianDistribution(C.multiply(sigma * sigma), m, rand));
 				x[i].evaluateFitness(evaluation);
 			}
 
 			// Sort by fitness and compute weighted mean into xmean
+			Arrays.sort(x); // x is now sorted by fitness
+			// m = ...
 
 			// Cumulation: Update evolution paths
 

@@ -297,91 +297,96 @@ public class Matrix {
 		}
 		return true;
 	}
-	
+
 	public void print() {
 		for (int i = 0; i < M; i++) {
-            for (int j = 0; j < N; j++) {
-                System.out.print(data[i][j] + "\t");
-            }
-            System.out.println();
-        }
+			for (int j = 0; j < N; j++) {
+				System.out.print(data[i][j] + "\t");
+			}
+			System.out.println();
+		}
 	}
 
 	/**
-	* Cholesky Decomposition on V => LL^T
-    * @return L
-    */
-    public static Matrix choleskyDecomposition(Matrix V) {
-        
-        int n  = V.getNDimension();
-        Matrix L = new Matrix(n);
+	 * Cholesky Decomposition
+	 * 
+	 * @param V
+	 * @return V => LL^T
+	 */
+	public static Matrix choleskyDecomposition(Matrix V) {
 
-        for (int i = 0; i < n; i++)  {
-            for (int j = 0; j <= i; j++) {
-                double sum = 0.0;
-                for (int k = 0; k < j; k++) {
-                    sum += L.getValue(i, k) * L.getValue(j, k);
-                }
-                if (i == j) {
-                	double tmp = V.getValue(i, i) - sum;
-                	if(tmp < 0)
-                		L.setValue(i, i, -1.0 * Math.sqrt(Math.abs(tmp)));
-                	else
-                		L.setValue(i, i, Math.sqrt(tmp));
-                } else {
-                	L.setValue(i, j, (1.0 / L.getValue(j, j)) * (V.getValue(i,j) - sum));
-                }
-            }
-        }
-        return L;
-    }
+		int n = V.getNDimension();
+		Matrix L = new Matrix(n);
 
-    /**
-    * Multivariate Gaussian Distribution LZ + M
-    * @return 
-    */
-    public static Vector multivariateGaussianDistribution(Matrix L, Vector mean){
-    	Random r = new Random();
-    	Vector Z = new Vector(L.getNDimension());
-    	for(int i = 0; i < Z.getDimension(); i++){
-    		Z.setValue(i, r.nextGaussian());
-    	}
-    	Vector mgd = (L.multiply(mean)).add(mean);
-    	return mgd;
-    }
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j <= i; j++) {
+				double sum = 0.0;
+				for (int k = 0; k < j; k++) {
+					sum += L.getValue(i, k) * L.getValue(j, k);
+				}
+				if (i == j) {
+					double tmp = V.getValue(i, i) - sum;
+					if (tmp < 0)
+						L.setValue(i, i, -1.0 * Math.sqrt(Math.abs(tmp)));
+					else
+						L.setValue(i, i, Math.sqrt(tmp));
+				} else {
+					L.setValue(i, j, (1.0 / L.getValue(j, j)) * (V.getValue(i, j) - sum));
+				}
+			}
+		}
+		return L;
+	}
 
-    public static void main(String[] args) {
-    	Random r = new Random();
-    	int n = 10;
-        Matrix V = new Matrix(n);
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                V.setValue(i, j, -5.0 + r.nextDouble() * 10);
-            }
-        }
-        System.out.println("V");
-        V.print();
-        System.out.println("----------------------");
+	/**
+	 * Multivariate Gaussian Distribution
+	 * 
+	 * @param L
+	 * @param mean
+	 * @param rand
+	 * @return LZ + M
+	 */
+	public static Vector multivariateGaussianDistribution(Matrix L, Vector mean, Random rand) {
+		Vector Z = new Vector(L.getNDimension());
+		for (int i = 0; i < Z.getDimension(); i++) {
+			Z.setValue(i, rand.nextGaussian());
+		}
+		Vector mgd = (L.multiply(mean)).add(mean);
+		return mgd;
+	}
 
-        Vector mean = new Vector(n);
-    	for(int i = 0; i < n; i++){
-    		mean.setValue(i, r.nextGaussian());
-    	}
-    	
-    	System.out.println("mean");
-    	mean.print();
-    	System.out.println("----------------------");
-    	
-        Matrix L = choleskyDecomposition(V);
-        
-        System.out.println("L");
-        L.print();
-        System.out.println("----------------------");
-        
-        Vector I = multivariateGaussianDistribution(L, mean);
-        
-        System.out.println("I");
-        I.print();
-        System.out.println("----------------------");
-    }
+	public static void main(String[] args) {
+		Random r = new Random();
+		int n = 10;
+		
+		Matrix V = new Matrix(n);
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < n; j++) {
+				V.setValue(i, j, -5.0 + r.nextDouble() * 10);
+			}
+		}
+		System.out.println("V");
+		V.print();
+		System.out.println("----------------------");
+
+		Vector mean = new Vector(n);
+		for (int i = 0; i < n; i++) {
+			mean.setValue(i, r.nextGaussian());
+		}
+		System.out.println("mean");
+		mean.print();
+		System.out.println("----------------------");
+
+		Matrix L = choleskyDecomposition(V);
+		
+		System.out.println("L");
+		L.print();
+		System.out.println("----------------------");
+
+		Vector I = multivariateGaussianDistribution(L, mean, r);
+
+		System.out.println("I");
+		I.print();
+		System.out.println("----------------------");
+	}
 }
