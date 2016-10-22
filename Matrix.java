@@ -1,4 +1,6 @@
 import java.util.Arrays;
+import java.util.Random;
+import java.lang.*;
 
 public class Matrix {
 
@@ -299,4 +301,72 @@ public class Matrix {
 		}
 		return true;
 	}
+
+	/**
+	* Cholesky Decomposition on V => LL^T
+    * @return L
+    */
+    public static Matrix choleskyDecomposition(Matrix V) {
+        
+        int n  = V.getNDimension();
+        Matrix L = new Matrix(n);
+
+        for (int i = 0; i < n; i++)  {
+            for (int j = 0; j <= i; j++) {
+                double sum = 0.0;
+                for (int k = 0; k < j; k++) {
+                    sum += L.getValue(i, k) * L.getValue(j, k);
+                }
+                if (i == j) 
+                	L.setValue(i, i, Math.sqrt(V.getValue(i, i) - sum));
+                else 
+                	L.setValue(i, j, 1.0 / L.getValue(j, j) * (V.getValue(i,j) - sum));
+            }
+        }
+        return L;
+    }
+
+    /**
+    * Multivariate Gaussian Distribution LZ + M
+    * @return 
+    */
+    public static Vector multivariateGaussianDistribution(Matrix L, Vector mean){
+    	Random r = new Random();
+    	Vector Z = new Vector(L.getNDimension());
+    	for(int i = 0; i < Z.getDimension(); i++){
+    		Z.setValue(i, r.nextGaussian());
+    	}
+    	Vector mgd = (L.multiply(mean)).add(mean);
+    	return mgd;
+    }
+
+    public static void main(String[] args) {
+    	Random r = new Random();
+    	int n = 10;
+        Matrix V = new Matrix(n);
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                V.setValue(i, j, -5.0 + r.nextDouble() * 10);
+            }
+        }
+
+        Vector mean = new Vector(n);
+    	for(int i = 0; i < n; i++){
+    		mean.setValue(i, r.nextGaussian());
+    	}
+        Matrix L = choleskyDecomposition(V);
+        Vector I = multivariateGaussianDistribution(L, mean);
+        
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                System.out.print(L.getValue(i, j) + " ");
+            }
+            System.out.println();
+        }
+        System.out.print("[ ");
+        for(int i = 0; i < I.getDimension(); i++)
+        	System.out.print(I.getValue(i) + " - ");
+        System.out.print("]\n");
+
+    }
 }
