@@ -259,7 +259,7 @@ public class Matrix {
 	 * @return this^-1
 	 */
 	public Matrix inverse() {
-		return (this.cofactor()).multiply(1.0 / this.determinant()).transpose();
+		return this.cofactor().multiply(1.0 / this.determinant()).transpose();
 	}
 
 	private static int alternateSign(int i) {

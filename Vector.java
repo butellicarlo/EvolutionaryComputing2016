@@ -3,7 +3,7 @@ import java.util.Arrays;
 public class Vector {
 
 	private int N; // dimension
-	private double[] data;
+	protected double[] data;
 
 	/**
 	 * Create new N-dimensional vector

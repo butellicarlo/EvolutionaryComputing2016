@@ -1,42 +1,36 @@
-import java.util.Arrays;
 import java.util.Random;
 
 import org.vu.contest.ContestEvaluation;
 
-public class Individual implements Comparable<Individual> {
+public class Individual extends Vector implements Comparable<Individual> {
 
 	private static int GENOM_SIZE = 10;
 	private static double MIN_VALUE = -5.0;
 	private static double MAX_VALUE = 5.0;
-	private final double[] genotype;
 
 	private static double UNKNOWN = Double.NaN;
 	private double fitness = UNKNOWN;
 
 	public Individual(Random rand) {
-		this.genotype = new double[GENOM_SIZE];
+		super(GENOM_SIZE);
 		for (int i = 0; i < GENOM_SIZE; i++) {
-			this.genotype[i] = -5.0 + rand.nextDouble() * 10;
+			this.data[i] = -5.0 + rand.nextDouble() * 10;
 		}
 	}
 
 	public Individual(double[] genotype) {
+		super(genotype);
 		assert (genotype.length == GENOM_SIZE);
-		this.genotype = genotype;
 	}
 
-	public double[] getGenotype() {
-		return genotype;
-	}
-	
-	public Vector getGenotypeAsVector() {
-		return new Vector(genotype);
+	public Individual(Vector vector) {
+		this(vector.data);
 	}
 
 	public void evaluateFitness(ContestEvaluation evaluation) {
 		// Evaluate not more than once!
 		if (this.fitness == UNKNOWN) {
-			this.fitness = (Double) evaluation.evaluate(genotype);
+			this.fitness = (Double) evaluation.evaluate(this.data);
 		}
 	}
 
@@ -66,39 +60,13 @@ public class Individual implements Comparable<Individual> {
 		return fitness.compareTo(other.fitness);
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + Arrays.hashCode(genotype);
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (obj == null) {
-			return false;
-		}
-		if (!(obj instanceof Individual)) {
-			return false;
-		}
-		Individual other = (Individual) obj;
-		if (!Arrays.equals(genotype, other.genotype)) {
-			return false;
-		}
-		return true;
-	}
-
 	public void print() {
 		System.out.print("[");
 		for (int i = 0; i < GENOM_SIZE; i++) {
 			if (i != 0) {
 				System.out.print(", ");
 			}
-			System.out.print(this.genotype[i]);
+			System.out.print(this.data[i]);
 		}
 		System.out.println("]\n");
 	}
