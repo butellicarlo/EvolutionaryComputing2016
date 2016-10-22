@@ -339,14 +339,15 @@ public class Matrix {
 	}
 
 	/**
-	 * Multivariate Gaussian Distribution
+     * Multivariate Gaussian Distribution
 	 * 
 	 * @param L
 	 * @param mean
 	 * @param rand
 	 * @return LZ + M
 	 */
-	public static Vector multivariateGaussianDistribution(Matrix L, Vector mean, Random rand) {
+	public static Vector multivariateGaussianDistribution(Matrix V, Vector mean, Random rand) {
+		Matrix L = choleskyDecomposition(V);
 		Vector Z = new Vector(L.getNDimension());
 		for (int i = 0; i < Z.getDimension(); i++) {
 			Z.setValue(i, rand.nextGaussian());
@@ -377,13 +378,7 @@ public class Matrix {
 		mean.print();
 		System.out.println("----------------------");
 
-		Matrix L = choleskyDecomposition(V);
-		
-		System.out.println("L");
-		L.print();
-		System.out.println("----------------------");
-
-		Vector I = multivariateGaussianDistribution(L, mean, r);
+		Vector I = multivariateGaussianDistribution(V, mean, r);
 
 		System.out.println("I");
 		I.print();
