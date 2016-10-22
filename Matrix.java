@@ -297,6 +297,15 @@ public class Matrix {
 		}
 		return true;
 	}
+	
+	public void print() {
+		for (int i = 0; i < M; i++) {
+            for (int j = 0; j < N; j++) {
+                System.out.print(data[i][j] + "\t");
+            }
+            System.out.println();
+        }
+	}
 
 	/**
 	* Cholesky Decomposition on V => LL^T
@@ -345,24 +354,29 @@ public class Matrix {
                 V.setValue(i, j, -5.0 + r.nextDouble() * 10);
             }
         }
+        System.out.println("V");
+        V.print();
+        System.out.println("----------------------");
 
         Vector mean = new Vector(n);
     	for(int i = 0; i < n; i++){
     		mean.setValue(i, r.nextGaussian());
     	}
+    	
+    	System.out.println("mean");
+    	mean.print();
+    	System.out.println("----------------------");
+    	
         Matrix L = choleskyDecomposition(V);
+        
+        System.out.println("L");
+        L.print();
+        System.out.println("----------------------");
+        
         Vector I = multivariateGaussianDistribution(L, mean);
         
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                System.out.print(L.getValue(i, j) + " ");
-            }
-            System.out.println();
-        }
-        System.out.print("[ ");
-        for(int i = 0; i < I.getDimension(); i++)
-        	System.out.print(I.getValue(i) + " - ");
-        System.out.print("]\n");
-
+        System.out.println("I");
+        I.print();
+        System.out.println("----------------------");
     }
 }

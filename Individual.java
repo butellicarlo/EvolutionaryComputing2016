@@ -24,7 +24,8 @@ public class Individual extends Vector implements Comparable<Individual> {
 	}
 
 	public Individual(Vector vector) {
-		this(vector.data);
+		super(vector.data);
+		assert (vector.data.length == GENOM_SIZE);
 	}
 
 	public void evaluateFitness(ContestEvaluation evaluation) {

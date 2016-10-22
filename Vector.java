@@ -195,4 +195,12 @@ public class Vector {
 		}
 		return true;
 	}
+
+	public void print() {
+		System.out.print("[ ");
+		for (int i = 0; i < N; i++) {
+			System.out.print(data[i] + " - ");
+		}
+		System.out.print("]\n");
+	}
 }
