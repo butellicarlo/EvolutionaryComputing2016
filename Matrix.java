@@ -191,97 +191,79 @@ public class Matrix {
 	}
 
 	/**
-	 * Swap rows i and j
+	 * Determinant
 	 * 
-	 * @param i
-	 * @param j
+	 * @return determinant
 	 */
-	private void swap(int i, int j) {
-		double[] temp = data[i];
-		data[i] = data[j];
-		data[j] = temp;
-	}
-
-	/**
-	 * Matrix inversion using Gauss–Jordan elimination
-	 * 
-	 * @return this^-1
-	 */
-	public Matrix invert() {
+	public double determinant() {
 		if (M != N) {
 			throw new RuntimeException("Illegal matrix dimensions. Matrix must be square.");
 		}
-		Matrix X = new Matrix(N);
-		Matrix B = Matrix.Identity(N);
-		// Upper triangle form
-		int index[] = this.gaussian();
-		for (int i = 0; i < N - 1; ++i) {
-			for (int j = i + 1; j < N; ++j) {
-				for (int k = 0; k < N; ++k) {
-					B.data[index[j]][k] -= this.data[index[j]][i] * B.data[index[i]][k];
-				}
-			}
+		if (N == 1) {
+			return data[0][0];
 		}
-		// Backward substitutions
-		for (int i = 0; i < N; ++i) {
-			X.data[N - 1][i] = B.data[index[N - 1]][i] / this.data[index[N - 1]][N - 1];
-			for (int j = N - 2; j >= 0; --j) {
-				X.data[j][i] = B.data[index[j]][i];
-				for (int k = j + 1; k < N; ++k) {
-					X.data[j][i] -= this.data[index[j]][k] * X.data[k][i];
-				}
-				X.data[j][i] /= this.data[index[j]][j];
-			}
+		if (N == 2) {
+			return (data[0][0] * data[1][1]) - (data[0][1] * data[1][0]);
 		}
-		return X;
+		double det = 0.0;
+		for (int i = 0; i < N; i++) {
+			det += alternateSign(i) * data[0][i] * createSubMatrix(0, i).determinant();
+		}
+		return det;
 	}
 
 	/**
-	 * Partial-pivoting Gaussian elimination
+	 * Sub-matrix excluding row r and col c
 	 * 
-	 * @return
+	 * @param r
+	 * @param c
+	 * @return this (with out row r and col c)
 	 */
-	private int[] gaussian() {
-		double c[] = new double[N];
-		int index[] = new int[N];
-		for (int i = 0; i < N; ++i) {
-			index[i] = i;
-		}
-		for (int i = 0; i < N; ++i) {
-			double c1 = 0;
-			for (int j = 0; j < N; ++j) {
-				double c0 = Math.abs(this.data[i][j]);
-				if (c0 > c1) {
-					c1 = c0;
-				}
+	public Matrix createSubMatrix(int r, int c) {
+		Matrix A = new Matrix(M - 1, N - 1);
+		int row = -1;
+		for (int i = 0; i < M; i++) {
+			if (i == r) {
+				continue;
 			}
-			c[i] = c1;
-		}
-		// Pivoting element from each column
-		int k = 0;
-		for (int j = 0; j < N - 1; ++j) {
-			double pi1 = 0;
-			for (int i = j; i < N; ++i) {
-				double pi0 = Math.abs(this.data[index[i]][j]);
-				pi0 /= c[index[i]];
-				if (pi0 > pi1) {
-					pi1 = pi0;
-					k = i;
+			row++;
+			int col = -1;
+			for (int j = 0; j < N; j++) {
+				if (j == c) {
+					continue;
 				}
-			}
-			// Interchange rows
-			int itmp = index[j];
-			index[j] = index[k];
-			index[k] = itmp;
-			for (int i = j + 1; i < N; ++i) {
-				double pj = this.data[index[i]][j] / this.data[index[j]][j];
-				this.data[index[i]][j] = pj;
-				for (int l = j + 1; l < N; ++l) {
-					this.data[index[i]][l] -= pj * this.data[index[j]][l];
-				}
+				A.data[row][++col] = data[i][j];
 			}
 		}
-		return index;
+		return A;
+	}
+
+	/**
+	 * Matrix of cofactors
+	 * 
+	 * @return cofactor matrix
+	 */
+	public Matrix cofactor() {
+		Matrix A = new Matrix(M, N);
+		for (int i = 0; i < M; i++) {
+			for (int j = 0; j < N; j++) {
+				A.data[i][j] = alternateSign(i) * alternateSign(j) * createSubMatrix(i, j).determinant();
+			}
+		}
+		return A;
+	}
+
+	/**
+	 * Inverse matrix
+	 * 
+	 * @return this^-1
+	 */
+	public Matrix inverse() {
+		return (this.cofactor()).multiply(1.0 / this.determinant()).transpose();
+	}
+
+	private static int alternateSign(int i) {
+		return (i % 2 == 0) ? 1 : -1;
 	}
 
 	@Override
