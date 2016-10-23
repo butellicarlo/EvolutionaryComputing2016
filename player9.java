@@ -74,6 +74,7 @@ public class player9 implements ContestSubmission {
 		for (int i = 0; i < weights.getDimension(); i++) {
 			weights.setValue(i, weights.getValue(i) / sum_weights);
 		}
+
 		double mueff = (weights.sum() * weights.sum()) / weights.sum_squares();
 		double cc = (4 + mueff / N) / (N + 4 + 2 * mueff / N);
 		double cs = (mueff + 2) / (N + mueff + 5);
