@@ -308,12 +308,33 @@ public class Matrix {
 	}
 
 	/**
+	* Check if the matrix is symmetric
+	* @return true or false
+	*/ 
+    public static boolean isSymmetric(Matrix A) {
+        int N = A.getNDimension();
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < i; j++) {
+                if (A.getValue(i, j) != A.getValue(j, i)) 
+                	return false;
+            }
+        }
+        return true;
+    }
+
+	/**
 	 * Cholesky Decomposition
 	 * 
 	 * @param V
 	 * @return V => LL^T
 	 */
 	public static Matrix choleskyDecomposition(Matrix V) {
+		if(!isSymmetric(V))
+			V = V.add(V.transpose());
+
+		System.out.println("Matrix V^T: ");
+		V.print();
+		System.out.println("|---------------------|");
 
 		int n = V.getNDimension();
 		Matrix L = new Matrix(n);
@@ -358,7 +379,7 @@ public class Matrix {
 
 	public static void main(String[] args) {
 		Random r = new Random();
-		int n = 10;
+		int n = 3;
 		
 		Matrix V = new Matrix(n);
 		for (int i = 0; i < n; i++) {

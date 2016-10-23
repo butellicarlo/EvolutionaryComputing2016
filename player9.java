@@ -55,13 +55,20 @@ public class player9 implements ContestSubmission {
 	public void cma_es() {
 
 		// Initialization
-		int lambda = 5;
 		int N = 10;
-		Matrix C = Matrix.Identity(N); // I (10-by-10)
-		double sigma = 0.3;     
-		Vector m = new Vector(N);
+		int lambda = 5;
+		double sigma = 0.3; 
+
+		Matrix V = Matrix.Identity(N); // I (10-by-10)
 		for (int i = 0; i < N; i++) {
-			m.setValue(i, rand.nextGaussian());
+			for (int j = 0; j < N; j++) {
+				V.setValue(i, j, -5.0 + r.nextDouble() * 10);
+			}
+		}
+    
+		Vector mean = new Vector(N);
+		for (int i = 0; i < N; i++) {
+			mean.setValue(i, rand.nextGaussian());
 		}
 
 		while (evaluation.hasEvaluationsLeft()) {
@@ -70,7 +77,7 @@ public class player9 implements ContestSubmission {
 			Individual x[] = new Individual[lambda];
 			for (int i = 0; i < lambda; i++) {
 				// x[i] = N(m_k,sigma^2C)
-				x[i] = new Individual(Matrix.multivariateGaussianDistribution(C.multiply(sigma * sigma), m, rand));
+				x[i] = new Individual(Matrix.multivariateGaussianDistribution(V.multiply(sigma * sigma), m, rand));
 				x[i].evaluateFitness(evaluation);
 			}
 
