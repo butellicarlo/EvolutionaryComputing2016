@@ -331,11 +331,6 @@ public class Matrix {
 	public static Matrix choleskyDecomposition(Matrix V) {
 		if(!isSymmetric(V))
 			V = V.add(V.transpose());
-
-		System.out.println("Matrix V^T: ");
-		V.print();
-		System.out.println("|---------------------|");
-
 		int n = V.getNDimension();
 		Matrix L = new Matrix(n);
 
@@ -379,6 +374,7 @@ public class Matrix {
 
 	public static void main(String[] args) {
 		Random r = new Random();
+		
 		int n = 3;
 		
 		Matrix V = new Matrix(n);
@@ -387,6 +383,10 @@ public class Matrix {
 				V.setValue(i, j, -5.0 + r.nextDouble() * 10);
 			}
 		}
+		System.out.println("Floor:");
+		System.out.println(4+Math.floor(3*Math.log(N))); 
+		System.out.println("|---------------------|");
+
 		System.out.println("V");
 		V.print();
 		System.out.println("----------------------");
@@ -404,5 +404,6 @@ public class Matrix {
 		System.out.println("I");
 		I.print();
 		System.out.println("----------------------");
+		
 	}
 }

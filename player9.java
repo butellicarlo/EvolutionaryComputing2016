@@ -43,6 +43,7 @@ public class player9 implements ContestSubmission {
 		population.print();
 
 		while (evaluation.hasEvaluationsLeft()) {
+			cma_es();
 
 			// Select parents
 			// Apply crossover / mutation operators
@@ -56,8 +57,29 @@ public class player9 implements ContestSubmission {
 
 		// Initialization
 		int N = 10;
-		int lambda = 5;
-		double sigma = 0.3; 
+		Vector mean = new Vector(N);
+		for (int i = 0; i < N; i++) {
+			mean.setValue(i, rand.nextGaussian());
+		}
+		double sigma = 0.3;
+
+		int lambda = 4+Math.floor(3*Math.log(N));		
+		double mu = lambda/2; 
+		Vector weights = new Vector(mu); // Vector or double ??
+		for(int i = 1; i <= mu; i++)
+			weights.setValue(i-1, Math.log(mu+1/2)-Math.log(i));
+		mu = Math.floor(mu);
+
+		double sum_weights = weights.sum(weights);
+		for(int i = 0; i < weights.getDimension(); i++){
+			weights.setValue(i, weights.getValue(i)/sum_weights);
+		}
+		double mueff = (weights.sum()*weights.sum()) / weights.sum_squares();
+		double cc = (4+mueff/N) / (N+4 + 2*mueff/N);
+		double cs = (mueff+2) / (N+mueff+5);
+		double c1 = 2 / (((N+1.3)*(N+1.3))+mueff);
+		double cmu = Math.min(1-c1, 2 * (mueff-2+1/mueff) / (((N+2)*(N+2))+mueff));
+		double damps = 1 + 2 * Math.max(0, sqrt((mueff-1)/(N+1))-1) + cs;
 
 		Matrix V = Matrix.Identity(N); // I (10-by-10)
 		for (int i = 0; i < N; i++) {
@@ -66,11 +88,6 @@ public class player9 implements ContestSubmission {
 			}
 		}
     
-		Vector mean = new Vector(N);
-		for (int i = 0; i < N; i++) {
-			mean.setValue(i, rand.nextGaussian());
-		}
-
 		while (evaluation.hasEvaluationsLeft()) {
 			
 			// Generate and evaluate lambda offsprings
@@ -83,7 +100,7 @@ public class player9 implements ContestSubmission {
 
 			// Sort by fitness and compute weighted mean into xmean
 			Arrays.sort(x); // x is now sorted by fitness
-			// m = ...
+			// mean = 
 
 			// Cumulation: Update evolution paths
 

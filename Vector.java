@@ -29,14 +29,14 @@ public class Vector {
 
 	public double getValue(int n) {
 		if (n < 0 || n >= this.N) {
-			throw new IllegalArgumentException("Vector out of bounds.");
+			throw new IllegalArgumentException("Get: Vector out of bounds.");
 		}
 		return this.data[n];
 	}
 
 	public void setValue(int n, double value) {
 		if (n < 0 || n >= this.N) {
-			throw new IllegalArgumentException("Vector out of bounds.");
+			throw new IllegalArgumentException("Set: Vector out of bounds.");
 		}
 		this.data[n] = value;
 	}
@@ -112,6 +112,30 @@ public class Vector {
 			sum += data[i] * data[i];
 		}
 		return Math.sqrt(sum);
+	}
+
+	/**
+	* Computes the sum of the elements in the vector
+	* @return sum
+	*/
+	public double sum(){
+		double sum = 0.0;
+		for(int i = 0; i < N; i++){
+			sum += data[i];
+		}
+		return sum;
+	}
+
+	/**
+	* Computes the sum of the suared elements
+	* @return sum
+	*/
+	public double sum_squares(){
+		double sum = 0.0;
+		for (int i = 0; i < N; i++) {
+			sum += data[i] * data[i];
+		}
+		return sum;
 	}
 
 	/**
