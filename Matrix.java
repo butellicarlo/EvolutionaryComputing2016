@@ -259,6 +259,16 @@ public class Matrix {
 	public Matrix inverse() {
 		return this.cofactor().multiply(1.0 / this.determinant()).transpose();
 	}
+	
+	public Matrix inverseSqrt() {
+		Matrix A = this.inverse();
+		for (int i = 0; i < M; i++) {
+			for (int j = 0; j < N; j++) {
+				A.data[i][j] = Math.sqrt(Math.abs(A.data[i][j]));
+			}
+		}
+		return A;
+	}
 
 	private static int alternateSign(int i) {
 		return (i % 2 == 0) ? 1 : -1;

@@ -28,33 +28,6 @@ public class player9 implements ContestSubmission {
 
 	public void run() {
 
-		// Initialize population
-		Population population = new Population(POPULATION_SIZE, rand);
-
-		// Calculate fitness
-		double best = population.getBestFitness(evaluation);
-		System.out.println("Best fitness: " + best);
-		double average = population.getAverageFitness(evaluation);
-		System.out.println("Average fitness: " + average);
-
-		// Sort population by fitness
-		population.sort(evaluation);
-		System.out.println("Sorted population:\n");
-		population.print();
-
-		cma_es();
-
-		/*
-		 * while (evaluation.hasEvaluationsLeft()) {
-		 * 
-		 * // Select parents // Apply crossover / mutation operators
-		 * 
-		 * // Select survivors }
-		 */
-	}
-
-	public void cma_es() {
-
 		// Initialization
 		int N = 10;
 		Vector mean = new Vector(N);
@@ -65,35 +38,40 @@ public class player9 implements ContestSubmission {
 
 		double lambda = 4.0 + Math.floor(3 * Math.log(N));
 		double mu = lambda / 2;
-		Vector weights = new Vector((int) mu); // Vector or double ??
-		for (int i = 1; i <= mu; i++)
-			weights.setValue(i - 1, Math.log(mu + 1 / 2) - Math.log(i));
+		
+		Vector weights = new Vector((int) mu);
+		for (int i = 0; i < mu; i++)
+			weights.setValue(i, Math.log(mu + 1/2) - Math.log(i+1));
 		mu = Math.floor(mu);
-
 		double sum_weights = weights.sum();
 		for (int i = 0; i < weights.getDimension(); i++) {
 			weights.setValue(i, weights.getValue(i) / sum_weights);
 		}
 
-		double mueff = (weights.sum() * weights.sum()) / weights.sum_squares();
+		double mueff = (weights.sum() * weights.sum()) / weights.sum_squares(); // TODO: 1 / sum(weights^2) ?
 		double cc = (4 + mueff / N) / (N + 4 + 2 * mueff / N);
 		double cs = (mueff + 2) / (N + mueff + 5);
 		double c1 = 2 / (((N + 1.3) * (N + 1.3)) + mueff);
 		double cmu = Math.min(1 - c1, 2 * (mueff - 2 + 1 / mueff) / (((N + 2) * (N + 2)) + mueff));
 		double damps = 1 + 2 * Math.max(0, Math.sqrt((mueff - 1) / (N + 1)) - 1) + cs;
+		
+		double chiN = Math.sqrt(N)*(1-1/(4*N)+1/(21*N*N));
 
+		Vector ps = Vector.zero(N);
+		Vector pc = Vector.zero(N);
+		
 		Matrix C = Matrix.Identity(N); // I (10-by-10)
-		for (int i = 0; i < N; i++) {
+		/*for (int i = 0; i < N; i++) {
 			for (int j = 0; j < N; j++) {
 				C.setValue(i, j, -5.0 + rand.nextDouble() * 10);
 			}
-		}
+		}*/
 
 		while (evaluation.hasEvaluationsLeft()) {
 
 			// Generate and evaluate lambda offsprings
 			Individual x[] = new Individual[(int) lambda];
-			for (int i = 0; i < lambda; i++) {
+			for (int i = 0; i < x.length; i++) {
 				// x[i] = N(m_k,sigma^2C)
 				x[i] = new Individual(Matrix.multivariateGaussianDistribution(C.multiply(sigma * sigma), mean, rand));
 				x[i].evaluateFitness(evaluation);
@@ -101,8 +79,7 @@ public class player9 implements ContestSubmission {
 
 			// Sort by fitness and compute weighted mean into xmean
 			Arrays.sort(x); // x is now sorted by fitness
-			Vector old_mean = new Vector(mean.getDimension());
-
+			Vector old_mean = new Vector(mean);
 			// mean = old_mean + sum_1_mu w_i * (x_i_lambda - oldmean)
 			Vector sum = Vector.zero(N);
 			for (int i = 0; i < mu; i++) {
@@ -111,13 +88,26 @@ public class player9 implements ContestSubmission {
 			mean = old_mean.add(sum);
 
 			// Cumulation: Update evolution paths
-
+			// ps = (1-cs)*ps + sqrt(cs*(2-cs)*mueff) * invsqrtC * (mean - old_mean)/sigma;
+			ps = ps.multiply(1-cs).add(C.inverseSqrt().multiply(Math.sqrt(cs*(2-cs)*mueff)).multiply(mean.subtract(old_mean).divide(sigma)));
+			
+			// TODO: hsig = norm(ps)/sqrt(1-(1-cs)^(2*counteval/lambda))/chiN < 1.4 + 2/(N+1);
+			boolean hsig = true;
+			// pc = (1-cc)*pc + hsig * sqrt(cc*(2-cc)*mueff)* (mean - old_mean) / sigma
+			pc = pc.multiply(1-cc).add(hsig ? (mean.subtract(old_mean).divide(sigma)).multiply(Math.sqrt(cc*(2-cc)*mueff)) : Vector.zero(N));
+			
 			// Adapt covariance matrix C
+			Matrix rank_min_mu_n = new Matrix(N); // TODO: calculate rank min mu n matrix
+			for (int i = 0; i < mu; i++) {
+				// weights.getValue(i).multiply
+			}
+			C = C.multiply(1-c1-cmu + cs).add(pc.rankOneMatrix().multiply(c1)).add(rank_min_mu_n.multiply(cmu));
 
 			// Adapt step size sigma
+			sigma = sigma * Math.exp((cs/damps)*(ps.norm()/chiN - 1)); 
 
 			// Decomposition of C into B*diag(D.^2)*B' (diagonalization)
-
+			// TODO: implement this
 		}
 	}
 }
