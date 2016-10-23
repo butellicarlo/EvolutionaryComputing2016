@@ -79,12 +79,12 @@ public class player9 implements ContestSubmission {
 		double cs = (mueff+2) / (N+mueff+5);
 		double c1 = 2 / (((N+1.3)*(N+1.3))+mueff);
 		double cmu = Math.min(1-c1, 2 * (mueff-2+1/mueff) / (((N+2)*(N+2))+mueff));
-		double damps = 1 + 2 * Math.max(0, sqrt((mueff-1)/(N+1))-1) + cs;
+		double damps = 1 + 2 * Math.max(0, Math.sqrt((mueff-1)/(N+1))-1) + cs;
 
 		Matrix C = Matrix.Identity(N); // I (10-by-10)
 		for (int i = 0; i < N; i++) {
 			for (int j = 0; j < N; j++) {
-				C.setValue(i, j, -5.0 + r.nextDouble() * 10);
+				C.setValue(i, j, -5.0 + rand.nextDouble() * 10);
 			}
 		}
     

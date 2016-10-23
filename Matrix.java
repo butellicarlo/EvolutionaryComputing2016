@@ -372,39 +372,4 @@ public class Matrix {
 		Vector sample = (L.multiply(mean)).add(mean);
 		return sample;
 	}
-
-	public static void main(String[] args) {
-		Random r = new Random();
-		
-		int n = 3;
-		
-		Matrix V = new Matrix(n);
-		for (int i = 0; i < n; i++) {
-			for (int j = 0; j < n; j++) {
-				V.setValue(i, j, -5.0 + r.nextDouble() * 10);
-			}
-		}
-		System.out.println("Floor:");
-		System.out.println(4+Math.floor(3*Math.log(N))); 
-		System.out.println("|---------------------|");
-
-		System.out.println("V");
-		V.print();
-		System.out.println("----------------------");
-
-		Vector mean = new Vector(n);
-		for (int i = 0; i < n; i++) {
-			mean.setValue(i, r.nextGaussian());
-		}
-		System.out.println("mean");
-		mean.print();
-		System.out.println("----------------------");
-
-		Vector I = multivariateGaussianDistribution(V, mean, r);
-
-		System.out.println("I");
-		I.print();
-		System.out.println("----------------------");
-		
-	}
 }
