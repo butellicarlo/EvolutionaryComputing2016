@@ -329,8 +329,7 @@ public class Matrix {
 	 * @return V => LL^T
 	 */
 	public static Matrix choleskyDecomposition(Matrix V) {
-		if(!isSymmetric(V))
-			V = V.add(V.transpose());
+		
 		int n = V.getNDimension();
 		Matrix L = new Matrix(n);
 
@@ -363,13 +362,15 @@ public class Matrix {
 	 * @return LZ + M
 	 */
 	public static Vector multivariateGaussianDistribution(Matrix V, Vector mean, Random rand) {
+		if(!isSymmetric(V))
+			V = V.add(V.transpose());
 		Matrix L = choleskyDecomposition(V);
 		Vector Z = new Vector(L.getNDimension());
 		for (int i = 0; i < Z.getDimension(); i++) {
 			Z.setValue(i, rand.nextGaussian());
 		}
-		Vector mgd = (L.multiply(mean)).add(mean);
-		return mgd;
+		Vector sample = (L.multiply(mean)).add(mean);
+		return sample;
 	}
 
 	public static void main(String[] args) {

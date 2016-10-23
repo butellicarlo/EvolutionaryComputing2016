@@ -63,14 +63,14 @@ public class player9 implements ContestSubmission {
 		}
 		double sigma = 0.3;
 
-		int lambda = 4+Math.floor(3*Math.log(N));		
+		double lambda = 4.0 + Math.floor(3*Math.log(N));		
 		double mu = lambda/2; 
-		Vector weights = new Vector(mu); // Vector or double ??
+		Vector weights = new Vector((int)mu); // Vector or double ??
 		for(int i = 1; i <= mu; i++)
 			weights.setValue(i-1, Math.log(mu+1/2)-Math.log(i));
 		mu = Math.floor(mu);
 
-		double sum_weights = weights.sum(weights);
+		double sum_weights = weights.sum();
 		for(int i = 0; i < weights.getDimension(); i++){
 			weights.setValue(i, weights.getValue(i)/sum_weights);
 		}
@@ -81,10 +81,10 @@ public class player9 implements ContestSubmission {
 		double cmu = Math.min(1-c1, 2 * (mueff-2+1/mueff) / (((N+2)*(N+2))+mueff));
 		double damps = 1 + 2 * Math.max(0, sqrt((mueff-1)/(N+1))-1) + cs;
 
-		Matrix V = Matrix.Identity(N); // I (10-by-10)
+		Matrix C = Matrix.Identity(N); // I (10-by-10)
 		for (int i = 0; i < N; i++) {
 			for (int j = 0; j < N; j++) {
-				V.setValue(i, j, -5.0 + r.nextDouble() * 10);
+				C.setValue(i, j, -5.0 + r.nextDouble() * 10);
 			}
 		}
     
@@ -94,13 +94,18 @@ public class player9 implements ContestSubmission {
 			Individual x[] = new Individual[lambda];
 			for (int i = 0; i < lambda; i++) {
 				// x[i] = N(m_k,sigma^2C)
-				x[i] = new Individual(Matrix.multivariateGaussianDistribution(V.multiply(sigma * sigma), m, rand));
+				x[i] = new Individual(Matrix.multivariateGaussianDistribution(C.multiply(sigma * sigma), m, rand));
 				x[i].evaluateFitness(evaluation);
 			}
 
 			// Sort by fitness and compute weighted mean into xmean
 			Arrays.sort(x); // x is now sorted by fitness
-			// mean = 
+			Vector old_mean = new Vector(mean.getDimension());
+			for(int i = 0; i < mean.getDimension(); i++){
+				old_mean.setValue(i, mean.getValue(i));
+				mean.setValue(i, x[i]*weights.getValue(i)); 
+			}
+
 
 			// Cumulation: Update evolution paths
 
