@@ -308,19 +308,20 @@ public class Matrix {
 	}
 
 	/**
-	* Check if the matrix is symmetric
-	* @return true or false
-	*/ 
-    public static boolean isSymmetric(Matrix A) {
-        int N = A.getNDimension();
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < i; j++) {
-                if (A.getValue(i, j) != A.getValue(j, i)) 
-                	return false;
-            }
-        }
-        return true;
-    }
+	 * Check if the matrix is symmetric
+	 * 
+	 * @return true or false
+	 */
+	public static boolean isSymmetric(Matrix A) {
+		int N = A.getNDimension();
+		for (int i = 0; i < N; i++) {
+			for (int j = 0; j < i; j++) {
+				if (A.getValue(i, j) != A.getValue(j, i))
+					return false;
+			}
+		}
+		return true;
+	}
 
 	/**
 	 * Cholesky Decomposition
@@ -329,7 +330,7 @@ public class Matrix {
 	 * @return V => LL^T
 	 */
 	public static Matrix choleskyDecomposition(Matrix V) {
-		
+
 		int n = V.getNDimension();
 		Matrix L = new Matrix(n);
 
@@ -354,7 +355,7 @@ public class Matrix {
 	}
 
 	/**
-     * Multivariate Gaussian Distribution
+	 * Multivariate Gaussian Distribution
 	 * 
 	 * @param L
 	 * @param mean
@@ -362,7 +363,7 @@ public class Matrix {
 	 * @return LZ + M
 	 */
 	public static Vector multivariateGaussianDistribution(Matrix V, Vector mean, Random rand) {
-		if(!isSymmetric(V))
+		if (!isSymmetric(V))
 			V = V.add(V.transpose());
 		Matrix L = choleskyDecomposition(V);
 		Vector Z = new Vector(L.getNDimension());
@@ -375,9 +376,9 @@ public class Matrix {
 
 	public static void main(String[] args) {
 		Random r = new Random();
-		
+
 		int n = 3;
-		
+
 		Matrix V = new Matrix(n);
 		for (int i = 0; i < n; i++) {
 			for (int j = 0; j < n; j++) {
@@ -385,7 +386,7 @@ public class Matrix {
 			}
 		}
 		System.out.println("Floor:");
-		System.out.println(4+Math.floor(3*Math.log(N))); 
+		System.out.println(4 + Math.floor(3 * Math.log(n)));
 		System.out.println("|---------------------|");
 
 		System.out.println("V");
@@ -405,6 +406,6 @@ public class Matrix {
 		System.out.println("I");
 		I.print();
 		System.out.println("----------------------");
-		
+
 	}
 }

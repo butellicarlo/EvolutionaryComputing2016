@@ -42,15 +42,15 @@ public class player9 implements ContestSubmission {
 		System.out.println("Sorted population:\n");
 		population.print();
 
-		while (evaluation.hasEvaluationsLeft()) {
-			cma_es();
+		cma_es();
 
-			// Select parents
-			// Apply crossover / mutation operators
-
-			// Select survivors
-
-		}
+		/*
+		 * while (evaluation.hasEvaluationsLeft()) {
+		 * 
+		 * // Select parents // Apply crossover / mutation operators
+		 * 
+		 * // Select survivors }
+		 */
 	}
 
 	public void cma_es() {
@@ -63,49 +63,51 @@ public class player9 implements ContestSubmission {
 		}
 		double sigma = 0.3;
 
-		double lambda = 4.0 + Math.floor(3*Math.log(N));		
-		double mu = lambda/2; 
-		Vector weights = new Vector((int)mu); // Vector or double ??
-		for(int i = 1; i <= mu; i++)
-			weights.setValue(i-1, Math.log(mu+1/2)-Math.log(i));
+		double lambda = 4.0 + Math.floor(3 * Math.log(N));
+		double mu = lambda / 2;
+		Vector weights = new Vector((int) mu); // Vector or double ??
+		for (int i = 1; i <= mu; i++)
+			weights.setValue(i - 1, Math.log(mu + 1 / 2) - Math.log(i));
 		mu = Math.floor(mu);
 
 		double sum_weights = weights.sum();
-		for(int i = 0; i < weights.getDimension(); i++){
-			weights.setValue(i, weights.getValue(i)/sum_weights);
+		for (int i = 0; i < weights.getDimension(); i++) {
+			weights.setValue(i, weights.getValue(i) / sum_weights);
 		}
-		double mueff = (weights.sum()*weights.sum()) / weights.sum_squares();
-		double cc = (4+mueff/N) / (N+4 + 2*mueff/N);
-		double cs = (mueff+2) / (N+mueff+5);
-		double c1 = 2 / (((N+1.3)*(N+1.3))+mueff);
-		double cmu = Math.min(1-c1, 2 * (mueff-2+1/mueff) / (((N+2)*(N+2))+mueff));
-		double damps = 1 + 2 * Math.max(0, sqrt((mueff-1)/(N+1))-1) + cs;
+		double mueff = (weights.sum() * weights.sum()) / weights.sum_squares();
+		double cc = (4 + mueff / N) / (N + 4 + 2 * mueff / N);
+		double cs = (mueff + 2) / (N + mueff + 5);
+		double c1 = 2 / (((N + 1.3) * (N + 1.3)) + mueff);
+		double cmu = Math.min(1 - c1, 2 * (mueff - 2 + 1 / mueff) / (((N + 2) * (N + 2)) + mueff));
+		double damps = 1 + 2 * Math.max(0, Math.sqrt((mueff - 1) / (N + 1)) - 1) + cs;
 
 		Matrix C = Matrix.Identity(N); // I (10-by-10)
 		for (int i = 0; i < N; i++) {
 			for (int j = 0; j < N; j++) {
-				C.setValue(i, j, -5.0 + r.nextDouble() * 10);
+				C.setValue(i, j, -5.0 + rand.nextDouble() * 10);
 			}
 		}
-    
+
 		while (evaluation.hasEvaluationsLeft()) {
-			
+
 			// Generate and evaluate lambda offsprings
-			Individual x[] = new Individual[lambda];
+			Individual x[] = new Individual[(int) lambda];
 			for (int i = 0; i < lambda; i++) {
 				// x[i] = N(m_k,sigma^2C)
-				x[i] = new Individual(Matrix.multivariateGaussianDistribution(C.multiply(sigma * sigma), m, rand));
+				x[i] = new Individual(Matrix.multivariateGaussianDistribution(C.multiply(sigma * sigma), mean, rand));
 				x[i].evaluateFitness(evaluation);
 			}
 
 			// Sort by fitness and compute weighted mean into xmean
 			Arrays.sort(x); // x is now sorted by fitness
 			Vector old_mean = new Vector(mean.getDimension());
-			for(int i = 0; i < mean.getDimension(); i++){
-				old_mean.setValue(i, mean.getValue(i));
-				mean.setValue(i, x[i]*weights.getValue(i)); 
-			}
 
+			// mean = old_mean + sum_1_mu w_i * (x_i_lambda - oldmean)
+			Vector sum = Vector.zero(N);
+			for (int i = 0; i < mu; i++) {
+				sum.add(x[i].subtract(old_mean).multiply(weights.getValue(i)));
+			}
+			mean = old_mean.add(sum);
 
 			// Cumulation: Update evolution paths
 
