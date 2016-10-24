@@ -6,9 +6,7 @@ public class Individual {
     int defaultSize = 10;
     double fitness = 0;
     double[] genotype = new double[defaultSize];
-    Random r = new Random();
     double sigma = 1.0;
-
 
 
     /* Constructur */
@@ -21,14 +19,14 @@ public class Individual {
         return genotype;
     }
 
-    public void setGenotypeRandom(){
+    public void setGenotypeRandom(Random r){
         
         for (int i = 0; i < defaultSize; i++) {
             genotype[i] = -5.0 + r.nextDouble() * 10; 
             }
     }
 
-    public void setGenotypeGaussian(Individual mean){
+    public void setGenotypeGaussian(Individual mean, Random r){
         for (int i = 0 ; i < defaultSize ; i++){
             double rgaus = mean.getFeature(i) + r.nextGaussian()* sigma;
             while (rgaus>= 5.0 || rgaus<=-5.0){

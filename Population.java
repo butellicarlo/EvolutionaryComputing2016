@@ -4,23 +4,22 @@ import java.util.*;
 public class Population extends Individual{
     
     Individual[] population;
-    Random r = new Random();
     double f = 0.3; // parameter
     double cr = 0.3; // cross-over rate/possibility. 
 
     Individual bestFitness;
 
     /* Constructur */
-    public Population(int size, boolean flag){
+    public Population(int size, boolean flag, Random r){
         Individual mean = new Individual();
-        mean.setGenotypeRandom();
+        mean.setGenotypeRandom(r);
 
         population = new Individual[size];
 
         if (flag){
             for (int i = 0; i < size; i++) {
                 population[i] = new Individual();
-                population[i].setGenotypeGaussian(mean);
+                population[i].setGenotypeGaussian(mean, r);
             }
 
         }
@@ -59,12 +58,12 @@ public class Population extends Individual{
         return ind;
     }
 
-    public void resetPopulation(){
-        population[0].setGenotypeRandom();
+    public void resetPopulation(Random r){
+        population[0].setGenotypeRandom(r);
 
             for (int i = 1; i < population.length; i++) {
                 population[i] = new Individual();
-                population[i].setGenotypeGaussian(getIndividual(0));
+                population[i].setGenotypeGaussian(getIndividual(0), r);
             }
 
         
@@ -72,7 +71,10 @@ public class Population extends Individual{
 
 
     public Individual getIndividual(int index){
-        return population[index];
+    	assert(index < population.length);
+    	Individual x = population[index];
+    	assert(x!=null);
+        return x;
     }
 
     public void findFittest(){
@@ -100,7 +102,7 @@ public class Population extends Individual{
         population[index] = x;
     }
 
-    public Population getMutatedPopulation(){
+    public Population getMutatedPopulation(Random r){
         /* 
             Three random individuals are randomly chosen x,y,z to create an mutated population
             p = F * (y-z)
@@ -117,7 +119,7 @@ public class Population extends Individual{
         Individual parent;
         int forcedCrossoverIndex;
 
-        Population children = new Population(populationSize(), false);
+        Population children = new Population(populationSize(), false, r);
         children.changeCr(cr);
         children.changeF(f);
 

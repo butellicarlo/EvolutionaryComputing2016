@@ -81,7 +81,7 @@ public class player9 implements ContestSubmission
         double checkpoint = 6.0;
 
         // init starting population
-        Population population = new Population(POPULATION_SIZE, true);
+        Population population = new Population(POPULATION_SIZE, true, rnd_);
         Population children;
         Double fitness;
         /* Calculate fitensses of the first random population */
@@ -100,14 +100,14 @@ public class player9 implements ContestSubmission
             // Select parents
             // Apply crossover / mutation operators
             // *** this is all done in getMutatedPopulation
-            children = population.getMutatedPopulation();
+            children = population.getMutatedPopulation(rnd_);
             
             // Check fitness of each child
             for(int i=0;i<children.populationSize();i++){
                 Individual child = children.getIndividual(i);
                 Individual parent = population.getIndividual(i);
                 
-                fitness = (double) evaluation_.evaluate(child.getGenotype());
+                fitness = (double) evaluation_.evaluate(cutValues(child.getGenotype()));
                 child.saveFitness(fitness);
                 
                 // if(evals< 5){
@@ -150,7 +150,7 @@ public class player9 implements ContestSubmission
                 double checkPerformance = population.bestFitness.getFitness()/bestFitnessStart ;
                 if(checkPerformance<= 1.25){
                     // population = new Population(POPULATION_SIZE,true);
-                    population.resetPopulation();
+                    population.resetPopulation(rnd_);
                     population.findFittest();
                     System.out.print("=============== restart ===========\n");
                     System.out.println(evaluation_.getFinalResult());
@@ -187,6 +187,14 @@ public class player9 implements ContestSubmission
 
         }
     }
+    
+    public static double[] cutValues(double[] values) {
+    	double[] new_values = new double[values.length];
+    	for (int i = 0; i < values.length; i++) {
+    		new_values[i] = values[i] < -5.0 ? -5.0 : values[i] > 5.0 ? 5.0 : values[i];
+		}
+    	return new_values;
+    }
 
     /* Randomly chose the index (numbers between start-end) of the individuals to be chosen */
     public int[] randomIndividualSelection(int startIndex, int endIndex, int n){
@@ -204,7 +212,7 @@ public class player9 implements ContestSubmission
             System.out.print(evals);
             System.out.print(" || best fitness so far: ");
             System.out.print(evaluation_.getFinalResult());
-             System.out.print("\n");
+            System.out.print("\n");
 
 
         }
