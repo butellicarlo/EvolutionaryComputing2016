@@ -3,6 +3,7 @@ import java.util.Arrays;
 public class Vector {
 
 	private int N; // dimension
+	private double fitness; // fitness
 	protected double[] data;
 
 	/**
@@ -12,11 +13,13 @@ public class Vector {
 	 */
 	public Vector(int N) {
 		this.N = N;
+		this.fitness = 0;
 		data = new double[N];
 	}
 
 	public Vector(double[] data) {
 		N = data.length;
+		this.fitness = 0;
 		this.data = new double[N];
 		for (int i = 0; i < N; i++) {
 			this.data[i] = data[i];
@@ -25,10 +28,19 @@ public class Vector {
 	
 	public Vector(Vector other) {
 		this(other.data);
+		this.fitness = 0;
 	}
 
 	public int getDimension() {
 		return N;
+	}
+
+	public void setFitness(double fit){
+		this.fitness = fit;
+	}
+
+	public double getFitness(){
+		return this.fitness;
 	}
 
 	public double getValue(int n) {
@@ -43,6 +55,13 @@ public class Vector {
 			throw new IllegalArgumentException("Set: Vector out of bounds.");
 		}
 		this.data[n] = value;
+	}
+
+	public double[] getDoubleArray(){
+		double[] v = new double[this.N];
+		for(int i = 0; i < this.N; i++)
+			v[i] = this.getValue(i);
+		return v;
 	}
 
 	/**

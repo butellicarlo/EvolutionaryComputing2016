@@ -7,8 +7,6 @@ import java.util.Random;
 
 public class player9 implements ContestSubmission {
 
-	private static int POPULATION_SIZE = 10;
-
 	private Random rand;
 	private EvaluationWrapper evaluation;
 
@@ -61,20 +59,15 @@ public class player9 implements ContestSubmission {
 		Vector pc = Vector.zero(N);
 		
 		Matrix C = Matrix.Identity(N); // I (10-by-10)
-		/*for (int i = 0; i < N; i++) {
-			for (int j = 0; j < N; j++) {
-				C.setValue(i, j, -5.0 + rand.nextDouble() * 10);
-			}
-		}*/
-
+		
 		while (evaluation.hasEvaluationsLeft()) {
 
 			// Generate and evaluate lambda offsprings
-			Individual x[] = new Individual[(int) lambda];
-			for (int i = 0; i < x.length; i++) {
+			Vector x[] = new Vector[(int) lambda];
+			for (int i = 0; i < (int) lambda; i++) {
 				// x[i] = N(m_k,sigma^2C)
-				x[i] = new Individual(Matrix.multivariateGaussianDistribution(C.multiply(sigma * sigma), mean, rand));
-				x[i].evaluateFitness(evaluation);
+				x[i] = Matrix.multivariateGaussianDistribution(C.multiply(sigma * sigma), mean, rand);
+				x[i].setFitness((double) evaluation.evaluate(x[i].getDoubleArray()));
 			}
 
 			// Sort by fitness and compute weighted mean into xmean

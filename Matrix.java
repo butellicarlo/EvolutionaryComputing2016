@@ -383,7 +383,7 @@ public class Matrix {
 		Vector sample = (L.multiply(mean)).add(mean);
 		return sample;
 	}
-
+	/*
 	public static void main(String[] args) {
 		Random r = new Random();
 
@@ -417,5 +417,5 @@ public class Matrix {
 		I.print();
 		System.out.println("----------------------");
 
-	}
+	}*/
 }
