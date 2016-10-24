@@ -280,4 +280,5 @@ public class Vector implements Comparable<Vector>{
 		}
 		System.out.print("]\n");
 	}
+
 }

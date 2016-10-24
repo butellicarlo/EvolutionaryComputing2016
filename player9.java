@@ -27,6 +27,7 @@ public class player9 implements ContestSubmission {
 	public void run() {
 
 		// Initialization
+		int eval = 0;
 		int N = 10;
 		Vector mean = new Vector(N);
 		for (int i = 0; i < N; i++) {
@@ -68,10 +69,15 @@ public class player9 implements ContestSubmission {
 				// x[i] = N(m_k,sigma^2C)
 				x[i] = Matrix.multivariateGaussianDistribution(C.multiply(sigma * sigma), mean, rand);
 				x[i].setFitness((double) evaluation.evaluate(x[i].getDoubleArray()));
+				eval++;
 			}
 
 			// Sort by fitness and compute weighted mean into xmean
 			Arrays.sort(x); // x is now sorted by fitness
+			
+			for(int i = 0; i < (int)lambda; i++)
+				System.out.println(i +" - " + x[i].getFitness());
+
 			Vector old_mean = new Vector(mean);
 			// mean = old_mean + sum_1_mu w_i * (x_i_lambda - oldmean)
 			Vector sum = Vector.zero(N);
@@ -85,16 +91,18 @@ public class player9 implements ContestSubmission {
 			ps = ps.multiply(1-cs).add(C.inverseSqrt().multiply(Math.sqrt(cs*(2-cs)*mueff)).multiply(mean.subtract(old_mean).divide(sigma)));
 			
 			// TODO: hsig = norm(ps)/sqrt(1-(1-cs)^(2*counteval/lambda))/chiN < 1.4 + 2/(N+1);
-			boolean hsig = true;
+			boolean hsig = ps.norm()/Math.sqrt(Math.pow(1-(1-cs), (2*eval/lambda))) < 1.4 + 2/(N+1);
+
 			// pc = (1-cc)*pc + hsig * sqrt(cc*(2-cc)*mueff)* (mean - old_mean) / sigma
 			pc = pc.multiply(1-cc).add(hsig ? (mean.subtract(old_mean).divide(sigma)).multiply(Math.sqrt(cc*(2-cc)*mueff)) : Vector.zero(N));
 			
 			// Adapt covariance matrix C
+			
 			Matrix rank_min_mu_n = new Matrix(N); // TODO: calculate rank min mu n matrix
 			for (int i = 0; i < mu; i++) {
 				// weights.getValue(i).multiply
 			}
-			C = C.multiply(1-c1-cmu + cs).add(pc.rankOneMatrix().multiply(c1)).add(rank_min_mu_n.multiply(cmu));
+			//C = C.multiply(1-c1-cmu + cs).add(pc.rankOneMatrix().multiply(c1)).add(rank_min_mu_n.multiply(cmu));
 
 			// Adapt step size sigma
 			sigma = sigma * Math.exp((cs/damps)*(ps.norm()/chiN - 1)); 
