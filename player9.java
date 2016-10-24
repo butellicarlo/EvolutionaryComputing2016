@@ -81,7 +81,7 @@ public class player9 implements ContestSubmission {
 		double cmu = Math.min(1-c1, 2 * (mueff-2+1/mueff) / (((N+2)*(N+2))+mueff));
 		double damps = 1 + 2 * Math.max(0, Math.sqrt((mueff-1)/(N+1))-1) + cs;
 
-		Matrix C = Matrix.Identity(N); // I (10-by-10)
+		Matrix B = Matrix.Identity(N); // I (10-by-10)
 		for (int i = 0; i < N; i++) {
 			for (int j = 0; j < N; j++) {
 				C.setValue(i, j, -5.0 + rand.nextDouble() * 10);
@@ -103,7 +103,7 @@ public class player9 implements ContestSubmission {
 			Vector old_mean = new Vector(mean.getDimension());
 			for(int i = 0; i < mean.getDimension(); i++){
 				old_mean.setValue(i, mean.getValue(i));
-				mean.setValue(i, x[i]*weights.getValue(i)); 
+				mean.setValue(i, x.getValue(i)*weights.getValue(i)); 
 			}
 
 

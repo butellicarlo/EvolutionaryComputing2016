@@ -35,6 +35,10 @@ public class Individual extends Vector implements Comparable<Individual> {
 		}
 	}
 
+	public double getValue(int i){
+		return this.data[i];
+	}
+
 	public double getFitness(ContestEvaluation evaluation) {
 		evaluateFitness(evaluation);
 		return this.fitness;
