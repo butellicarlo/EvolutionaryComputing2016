@@ -1,10 +1,11 @@
 import java.util.Arrays;
 
-public class Vector {
+public class Vector implements Comparable<Vector>{
 
 	private int N; // dimension
 	private double fitness; // fitness
 	protected double[] data;
+	private static double UNKNOWN = Double.NaN;
 
 	/**
 	 * Create new N-dimensional vector
@@ -261,6 +262,15 @@ public class Vector {
 			return false;
 		}
 		return true;
+	}
+
+	@Override
+	public int compareTo(Vector v){
+		if (this.fitness == UNKNOWN || v.fitness == UNKNOWN) {
+			throw new RuntimeException("evaluateFitness(..) not called before compareTo(..)");
+		}
+		Double fitness = this.fitness;
+		return fitness.compareTo(v.fitness);
 	}
 
 	public void print() {
