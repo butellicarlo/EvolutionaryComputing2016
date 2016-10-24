@@ -386,29 +386,17 @@ public class Matrix {
 
 	public static void main(String[] args) {
 		Random r = new Random();
-<<<<<<< HEAD
-		
-		int n = 10;
-		
-=======
 
 		int n = 3;
 
->>>>>>> 87df4a457c0d8b6c3dcc5acd3d7e4e3b73429c32
 		Matrix V = new Matrix(n);
 		for (int i = 0; i < n; i++) {
 			for (int j = 0; j < n; j++) {
 				V.setValue(i, j, -5.0 + r.nextDouble() * 10);
 			}
 		}
-<<<<<<< HEAD
-		Matrix Im = Matrix.Identity(n);
-		System.out.println("Identity:");
-		Im.print();
-=======
 		System.out.println("Floor:");
 		System.out.println(4 + Math.floor(3 * Math.log(n)));
->>>>>>> 87df4a457c0d8b6c3dcc5acd3d7e4e3b73429c32
 		System.out.println("|---------------------|");
 
 		System.out.println("V");
@@ -428,10 +416,6 @@ public class Matrix {
 		System.out.println("I");
 		I.print();
 		System.out.println("----------------------");
-<<<<<<< HEAD
-		
-=======
 
->>>>>>> 87df4a457c0d8b6c3dcc5acd3d7e4e3b73429c32
 	}
 }

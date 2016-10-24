@@ -48,10 +48,6 @@ public class player9 implements ContestSubmission {
 			weights.setValue(i, weights.getValue(i) / sum_weights);
 		}
 
-<<<<<<< HEAD
-		Matrix B = Matrix.Identity(N); // I (10-by-10)
-		for (int i = 0; i < N; i++) {
-=======
 		double mueff = (weights.sum() * weights.sum()) / weights.sum_squares(); // TODO: 1 / sum(weights^2) ?
 		double cc = (4 + mueff / N) / (N + 4 + 2 * mueff / N);
 		double cs = (mueff + 2) / (N + mueff + 5);
@@ -66,7 +62,6 @@ public class player9 implements ContestSubmission {
 		
 		Matrix C = Matrix.Identity(N); // I (10-by-10)
 		/*for (int i = 0; i < N; i++) {
->>>>>>> 87df4a457c0d8b6c3dcc5acd3d7e4e3b73429c32
 			for (int j = 0; j < N; j++) {
 				C.setValue(i, j, -5.0 + rand.nextDouble() * 10);
 			}
@@ -84,18 +79,11 @@ public class player9 implements ContestSubmission {
 
 			// Sort by fitness and compute weighted mean into xmean
 			Arrays.sort(x); // x is now sorted by fitness
-<<<<<<< HEAD
-			Vector old_mean = new Vector(mean.getDimension());
-			for(int i = 0; i < mean.getDimension(); i++){
-				old_mean.setValue(i, mean.getValue(i));
-				mean.setValue(i, x.getValue(i)*weights.getValue(i)); 
-=======
 			Vector old_mean = new Vector(mean);
 			// mean = old_mean + sum_1_mu w_i * (x_i_lambda - oldmean)
 			Vector sum = Vector.zero(N);
 			for (int i = 0; i < mu; i++) {
 				sum.add(x[i].subtract(old_mean).multiply(weights.getValue(i)));
->>>>>>> 87df4a457c0d8b6c3dcc5acd3d7e4e3b73429c32
 			}
 			mean = old_mean.add(sum);
 
