@@ -2,7 +2,7 @@ import java.util.Random;
 
 import org.vu.contest.ContestEvaluation;
 
-public class Individual extends Vector implements Comparable<Individual> {
+public class Individual extends Vector {
 
 	private static int GENOM_SIZE = 10;
 	private static double MIN_VALUE = -5.0;
