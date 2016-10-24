@@ -37,8 +37,10 @@ public class EvaluationWrapper implements ContestEvaluation {
 	public Object evaluate(Object arg0) {
 		if (evaluations_left > 0) {
 			evaluations_left--;
+			return this.evaluation.evaluate(arg0);
+		} else {
+			return Double.MIN_VALUE;
 		}
-		return this.evaluation.evaluate(arg0);
 	}
 
 	@Override
