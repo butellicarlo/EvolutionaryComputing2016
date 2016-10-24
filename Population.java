@@ -5,19 +5,42 @@ public class Population extends Individual{
     
     Individual[] population;
     Random r = new Random();
-    double f = 0.5; // parameter
-    double cr = 0.5; // cross-over rate/possibility. 
+    double f = 0.3; // parameter
+    double cr = 0.3; // cross-over rate/possibility. 
+
+    Individual bestFitness;
 
     /* Constructur */
     public Population(int size, boolean flag){
+        Individual mean = new Individual();
+        mean.setGenotypeRandom();
+
         population = new Individual[size];
+
         if (flag){
             for (int i = 0; i < size; i++) {
                 population[i] = new Individual();
-                population[i].setGenotypeRandom();
+                population[i].setGenotypeGaussian(mean);
             }
 
         }
+
+        // if (flag){
+        //     for (int i = 1; i < size; i++) {
+        //         population[i] = new Individual();
+        //         population[i].setGenotypeRandom();
+        //     }
+
+        // }
+    }
+
+
+    public void changeCr(double newCr){
+        cr = newCr;
+    }
+
+      public void changeF(double newF){
+        f = newF;
     }
 
     public int populationSize() {
@@ -36,21 +59,32 @@ public class Population extends Individual{
         return ind;
     }
 
+    public void resetPopulation(){
+        population[0].setGenotypeRandom();
+
+            for (int i = 1; i < population.length; i++) {
+                population[i] = new Individual();
+                population[i].setGenotypeGaussian(getIndividual(0));
+            }
+
+        
+    }
+
 
     public Individual getIndividual(int index){
         return population[index];
     }
 
-    public int findFittest(double[] fitnesses){
-        double fittest = fitnesses[0];
+    public void findFittest(){
+        Individual fittest = population[0];
         int index = 0;
-        for(int i = 1; i < fitnesses.length; i++){
-            if(fittest <= fitnesses[i]){
-                fittest = fitnesses[i];
+        for(int i = 1; i < populationSize(); i++){
+            if(fittest.getFitness() <= population[i].getFitness()){
+                fittest = population[i];
                 index = i;
             }
         }
-        return index;
+        bestFitness = fittest;
     }
 
     public void printPopulation() {
@@ -84,6 +118,8 @@ public class Population extends Individual{
         int forcedCrossoverIndex;
 
         Population children = new Population(populationSize(), false);
+        children.changeCr(cr);
+        children.changeF(f);
 
         double c; //chance, to be compared with cr
         for(int i = 0; i < populationSize(); i++){
