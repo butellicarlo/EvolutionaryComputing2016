@@ -22,6 +22,10 @@ public class Vector {
 			this.data[i] = data[i];
 		}
 	}
+	
+	public Vector(Vector other) {
+		this(other.data);
+	}
 
 	public int getDimension() {
 		return N;
@@ -171,6 +175,26 @@ public class Vector {
 			y.data[i] = this.data[i] * scalar;
 		}
 		return y;
+	}
+	
+	/**
+	 * Vector-scalar division
+	 * 
+	 * @param scalar
+	 * @return y = this * scalar
+	 */
+	public Vector divide(double scalar) {
+		Vector y = new Vector(N);
+		for (int i = 0; i < N; i++) {
+			y.data[i] = this.data[i] / scalar;
+		}
+		return y;
+	}
+	
+	public Matrix rankOneMatrix() {
+		throw new RuntimeException("implement rankOneMatrix()");
+		// TODO: implement this
+		// TODO: this * this^T
 	}
 
 	/**
